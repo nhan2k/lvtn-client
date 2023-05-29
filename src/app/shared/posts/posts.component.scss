@@ -1,0 +1,6 @@
+.card-post {
+  &:hover {
+    border: 2px solid #000;
+    filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+  }
+}

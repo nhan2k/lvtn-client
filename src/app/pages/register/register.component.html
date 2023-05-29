@@ -1,0 +1,40 @@
+<form
+  class="container"
+  style="max-width: 30rem"
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập số điện thoại<span class="error-message">*</span></label
+    >
+    <input type="text" class="form-control" formControlName="phoneNumber" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập mật khẩu<span class="error-message">*</span></label
+    >
+    <input type="password" class="form-control" formControlName="password" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập email<span class="error-message">*</span></label
+    >
+    <input type="email" class="form-control" formControlName="email" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập họ tên<span class="error-message">*</span></label
+    >
+    <input type="text" class="form-control" formControlName="fullName" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập địa chỉ<span class="error-message">*</span></label
+    >
+    <input type="text" class="form-control" formControlName="address" />
+  </div>
+  <button type="submit" class="btn btn-primary" [routerLink]="['/register']">
+    Đăng ký
+  </button>
+</form>

@@ -1,0 +1,87 @@
+<div class="container text-center">
+  <div class="row">
+    <div class="col-9">
+      <div class="card">
+        <div
+          id="carouselExampleIndicators"
+          class="carousel slide bg-secondary"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div
+              *ngFor="let item of post?.imagePath; index as i"
+              class="carousel-item active mx-auto"
+              [class.my_class]="{ active: i === 0 }"
+              style="width: 50rem; height: 30rem"
+            >
+              <img
+                [src]="'http://localhost:3000/' + item"
+                class="d-block w-100 h-100"
+                style="object-fit: cover; object-position: center"
+                [alt]="'http://localhost:3000/' + item"
+              />
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ post?.title }}</h5>
+          <p class="card-text" [innerHTML]="post?.content"></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="card">
+        <ul class="list-group list-group-flush text-start">
+          <li class="list-group-item">
+            <div class="d-flex gap-3 align-items-center">
+              <i class="bi bi-person-circle border rounded px-3 py-2"></i>
+              <span>{{ post?.userId?.fullName }}</span>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="d-flex gap-3 align-items-center">
+              <i class="bi bi-shop fs-4 px-3"></i>
+              <span>{{ post?.userId?.type }}</span>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="d-flex gap-3 align-items-center">
+              <i class="bi bi-telephone fs-4 px-3"></i>
+              <span>{{ post?.userId?.phoneNumber }}</span>
+            </div>
+          </li>
+          <li
+            *ngIf="post?.userId?.email !== email"
+            class="list-group-item active"
+          >
+            <a
+              class="d-flex gap-3 align-items-center cursor-pointer"
+              (click)="onClickChat(post?.userId?._id)"
+            >
+              <i class="bi bi-chat-left-dots fs-4 px-3"></i>
+              <span>Chat với người bán</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

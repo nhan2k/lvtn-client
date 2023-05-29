@@ -1,0 +1,287 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-4">
+      <div class="my-2">
+        <label for="formFile" class="form-label"
+          >Ảnh sản phẩm<span class="error-message">*</span></label
+        >
+        <input
+          class="form-control"
+          type="file"
+          id="formFile"
+          multiple
+          (change)="onFileChange($event)"
+        />
+      </div>
+      <div class="row">
+        <div
+          class="col-6"
+          *ngFor="let url of images"
+          style="width: 8rem; height: 8rem"
+        >
+          <img
+            [src]="url"
+            height="100%"
+            width="100%"
+            style="margin: 3px; object-fit: cover; object-position: center"
+          />
+        </div>
+
+        <div
+          *ngIf="
+            myForm.get('fileSource')?.invalid &&
+            myForm.get('fileSource')?.touched
+          "
+          class="error-message"
+        >
+          File is required.
+        </div>
+      </div>
+      <br />
+    </div>
+    <div class="col-8">
+      <div class="my-2">
+        <label class="form-label">Danh mục bài đăng</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          formControlName="categoryName"
+          (change)="onChange($event.target)"
+        >
+          <option value="{{ selectedCategory }}" selected>
+            {{ selectedCategory }}
+          </option>
+          <option
+            *ngFor="let category of categories; index as i"
+            value="{{ category.value }}"
+          >
+            {{ category.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="col-2 form-check ms-3 my-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            checked
+            formControlName="type"
+            value="Cần bán"
+          />
+          <label class="form-check-label">Cần bán</label>
+        </div>
+        <div class="col-2 form-check my-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="type"
+            value="Cho thuê"
+          />
+          <label class="form-check-label">Cho thuê</label>
+        </div>
+        <div class="my-2 col-12">
+          <label class="form-label"
+            >Địa chỉ<span class="error-message">*</span></label
+          >
+          <textarea class="form-control" formControlName="address"></textarea>
+          <div
+            *ngIf="
+              myForm.get('address')?.invalid && myForm.get('address')?.touched
+            "
+            class="error-message"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Số nhà<span class="error-message">*</span></label
+          >
+          <input class="form-control" type="text" formControlName="codeHouse" />
+          <div
+            *ngIf="
+              myForm.get('codeHouse')?.invalid &&
+              myForm.get('codeHouse')?.touched
+            "
+            class="error-message"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Phân khu / Lô<span class="error-message">*</span></label
+          >
+          <input class="form-control" formControlName="block" />
+          <div
+            *ngIf="myForm.get('block')?.invalid && myForm.get('block')?.touched"
+            class="error-message"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Loại hình nhà ở<span class="error-message">*</span></label
+          >
+          <select formControlName="typeHouse" class="form-select">
+            <option *ngFor="let item of typeHouses" value="{{ item.value }}">
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Số phòng ngủ<span class="error-message">*</span></label
+          >
+          <select formControlName="numberOfBedroom" class="form-select">
+            <option *ngFor="let item of numOfBedrooms" value="{{ item.value }}">
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Số phòng ngủ<span class="error-message">*</span></label
+          >
+          <select formControlName="numberOfBathroom" class="form-select">
+            <option
+              *ngFor="let item of numOfBathrooms"
+              value="{{ item.value }}"
+            >
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Hướng cửa chính<span class="error-message">*</span></label
+          >
+          <select formControlName="doorDirection" class="form-select">
+            <option
+              *ngFor="let item of balconnyDirections"
+              value="{{ item.value }}"
+            >
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Giấy tờ pháp lý<span class="error-message">*</span></label
+          >
+          <select formControlName="juridical" class="form-select">
+            <option *ngFor="let item of juridicals" value="{{ item.value }}">
+              {{ item.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Diện tích<span class="error-message">*</span></label
+          >
+          <input class="form-control" type="number" formControlName="area" />
+          <div
+            *ngIf="myForm.get('area')?.invalid && myForm.get('area')?.touched"
+            class="error-message"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Chiều dài<span class="error-message">*</span></label
+          >
+          <input class="form-control" type="number" formControlName="height" />
+          <div
+            *ngIf="
+              myForm.get('height')?.invalid && myForm.get('height')?.touched
+            "
+            class="error-message"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Chiều rộng<span class="error-message">*</span></label
+          >
+          <input class="form-control" type="number" formControlName="width" />
+          <div
+            *ngIf="myForm.get('width')?.invalid && myForm.get('width')?.touched"
+            class="error-message"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+
+        <div class="my-2 col-6">
+          <label class="form-label"
+            >Giá<span class="error-message">*</span></label
+          >
+          <input
+            class="form-control"
+            type="number"
+            formControlName="totalPrice"
+          />
+          <div
+            *ngIf="
+              myForm.get('totalPrice')?.invalid &&
+              myForm.get('totalPrice')?.touched
+            "
+            class="error-message"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+
+        <div class="my-2 col-12">
+          <label class="form-label"
+            >Tiêu đề<span class="error-message">*</span></label
+          >
+          <input class="form-control" formControlName="title" />
+          <div
+            *ngIf="myForm.get('title')?.invalid && myForm.get('title')?.touched"
+            class="error-message"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+
+        <div class="my-2 col-12">
+          <label class="form-label"
+            >Nội dung<span class="error-message">*</span></label
+          >
+          <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
+
+          <div
+            *ngIf="
+              myForm.get('content')?.invalid && myForm.get('content')?.touched
+            "
+            class="error-message"
+          >
+            Trường bắt buộc nhập
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-3 ms-2">
+        <button type="submit" class="btn btn-primary col-3">Đăng tin</button>
+        <div *ngIf="errorMessage" class="error-message col-9">
+          {{ errorMessage }}
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
