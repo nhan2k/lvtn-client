@@ -8,9 +8,37 @@ import { environment } from '@environment/environment.development';
 export class ChatService {
   constructor(private readonly httpClient: HttpClient) {}
 
-  public createGroup(data: { _ids: string[] }) {
+  public createGroup(_id: string) {
     try {
-      return this.httpClient.post(`${environment.apiUrl}/`, {});
-    } catch (error) {}
+      return this.httpClient.post(`${environment.apiUrl}/chat`, { _id });
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  }
+
+  public createMessage(data: any) {
+    try {
+      return this.httpClient.post(`${environment.apiUrl}/chat/message`, data);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  }
+
+  public getAllGroup() {
+    try {
+      return this.httpClient.get(`${environment.apiUrl}/chat`);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  }
+
+  public getAllMessages(groupId: string) {
+    try {
+      return this.httpClient.get(
+        `${environment.apiUrl}/chat/message/${groupId}`
+      );
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
   }
 }

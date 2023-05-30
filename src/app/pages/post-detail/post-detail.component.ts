@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
+import { ChatService } from '@core/services/chat.service';
 import { LoadingService } from '@core/services/loading.service';
 import { PostService } from '@core/services/post.service';
 import { ToastrService } from 'ngx-toastr';
@@ -21,7 +22,8 @@ export class PostDetailComponent implements OnInit {
     private readonly postService: PostService,
     private readonly loadingService: LoadingService,
     private readonly toastrService: ToastrService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly chatService:ChatService
   ) {}
   ngOnInit(): void {
     this.email = this.authService.getEmail();
@@ -49,8 +51,12 @@ export class PostDetailComponent implements OnInit {
   onClickChat(userId: string) {
     if (this.authService.getToken()) {
       this.loadingService.setLoading(true);
-
-      this.router.navigate(['/chat']);
+      this.chatService.createGroup(userId)?.subscribe((response:any) => {
+        console.log("🚀 ~ file: post-detail.component.ts:55 ~ PostDetailComponent ~ this.chatService.createGroup ~ response:", response)
+        
+        this.router.navigate(['/chat']);
+      this.loadingService.setLoading(false);
+    })
     } else {
       this.router.navigate(['/login']);
     }

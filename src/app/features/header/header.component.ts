@@ -16,10 +16,6 @@ export class HeaderComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     if (this.authService.getToken()) {
-      console.log(
-        '🚀 ~ file: header.component.ts:19 ~ HeaderComponent ~ ngOnInit ~ this.authService.getToken():',
-        this.authService.getToken()
-      );
       this.isLoggined = true;
     }
   }
