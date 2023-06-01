@@ -1,21 +1,28 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
+
+export const DEFAULT_TIMEOUT = new InjectionToken<number>('defaultTimeout');
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    @Inject(DEFAULT_TIMEOUT) protected defaultTimeout: number
+  ) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    const timeoutValue = request.headers.get('timeout') || this.defaultTimeout;
+    const timeoutValueNumeric = Number(timeoutValue);
     const token = this.authService.getToken();
     if (token) {
       request = request.clone({
@@ -24,6 +31,6 @@ export class TokenInterceptor implements HttpInterceptor {
         },
       });
     }
-    return next.handle(request);
+    return next.handle(request).pipe(timeout(timeoutValueNumeric));
   }
 }

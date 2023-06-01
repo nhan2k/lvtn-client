@@ -1,12 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environment/environment.development';
+import { Socket } from 'ngx-socket-io';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor(
+    private readonly httpClient: HttpClient,
+    private socket: Socket
+  ) {}
 
   public createGroup({
     postId,
@@ -25,9 +30,10 @@ export class ChatService {
     }
   }
 
-  public createMessage(data: any) {
+  public createMessage(data: any): Observable<any> {
     try {
-      return this.httpClient.post(`${environment.apiUrl}/chat/message`, data);
+      return this.socket.emit('sendMessage', data);
+      // return this.httpClient.post(`${environment.apiUrl}/chat/message`, data);
     } catch (error) {
       throw new Error((error as Error).message);
     }

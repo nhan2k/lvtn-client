@@ -93,6 +93,8 @@
   border-bottom: 2px solid #fff;
   min-height: 34rem;
   overflow-y: auto;
+  max-height: 34rem;
+  overflow: scroll;
 }
 
 .chat .chat-history ul {

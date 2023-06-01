@@ -31,13 +31,13 @@ export class PostDetailComponent implements OnInit {
     private readonly chatService: ChatService
   ) {}
   ngOnInit(): void {
+    this.loadingService.setLoading(true);
     this.email = this.authService.getEmail();
-
-    this.route.queryParams.subscribe(
-      (params) => {
+    this.route.queryParams.subscribe({
+      next: (params) => {
         this.id = params['id'];
-        this.postService.getOne(params['id']).subscribe(
-          (data) => {
+        this.postService.getOne(params['id']).subscribe({
+          next: (data) => {
             this.post = data;
 
             for (const key in data) {
@@ -47,18 +47,19 @@ export class PostDetailComponent implements OnInit {
                 }
               }
             }
+            this.loadingService.setLoading(false);
           },
-          (error) => {
+          error: (error) => {
             this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
             this.loadingService.setLoading(false);
-          }
-        );
+          },
+        });
       },
-      (error) => {
+      error: (error) => {
         this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
         this.loadingService.setLoading(false);
-      }
-    );
+      },
+    });
   }
 
   onClickApproved() {

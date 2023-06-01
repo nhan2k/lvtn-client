@@ -5,6 +5,7 @@ import {
   postStatusPipe,
   postIsReviewPipe,
   keyOfCategoryPipe,
+  postCurrencyPipe,
 } from './pipes/posts.pipe';
 import { userStatusPipe } from './pipes/users.pipe';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
@@ -16,6 +17,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     userStatusPipe,
     TimeAgoPipe,
     keyOfCategoryPipe,
+    postCurrencyPipe,
   ],
   imports: [CommonModule, TokenModule],
   exports: [
@@ -25,6 +27,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     userStatusPipe,
     TimeAgoPipe,
     keyOfCategoryPipe,
+    postCurrencyPipe,
   ],
 })
 export class CoreModule {}

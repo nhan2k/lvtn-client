@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { TokenInterceptor } from './token.interceptor';
+import { DEFAULT_TIMEOUT, TokenInterceptor } from './token.interceptor';
 
 @NgModule({
   declarations: [],
@@ -12,6 +12,7 @@ import { TokenInterceptor } from './token.interceptor';
       useClass: TokenInterceptor,
       multi: true,
     },
+    [{ provide: DEFAULT_TIMEOUT, useValue: 30000 }],
   ],
 })
 export class TokenModule {}

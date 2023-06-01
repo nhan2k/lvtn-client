@@ -52,7 +52,6 @@ export class PostCreatePhoneComponent {
   ) {
     this.myForm = this.formBuilder.group({
       categoryName: ['Điện thoại'],
-      type: ['Cần bán'],
       brand: ['Apple'],
       capacity: ['< 8 GB'],
       guarantee: ['1 tháng'],

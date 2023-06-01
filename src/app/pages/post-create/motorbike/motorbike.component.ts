@@ -28,9 +28,8 @@ export class PostCreateMotorbikeComponent {
   origins: ISelect[] = [];
   capacities: ISelect[] = [];
   yearOfManufactures: ISelect[] = [];
-
   images: any[] = [];
-
+  taxableValue: string = '';
   selectedCategory: string = 'Xe máy';
   errorMessage: string | null = null;
 
@@ -56,7 +55,7 @@ export class PostCreateMotorbikeComponent {
       yearOfManufacture: ['2023'],
       statusMotorbike: ['Mới'],
       numberOfKM: [0, Validators.min(0)],
-      totalPrice: [0, Validators.min(0)],
+      totalPrice: [0, [Validators.min(0)]],
       title: [null, Validators.required],
       content: [null, Validators.required],
       image: [null, Validators.required],
@@ -79,6 +78,14 @@ export class PostCreateMotorbikeComponent {
   onChange(target: any) {
     this.selectedCategory = target.value;
     this.router.navigate([`/${target.value}`]);
+  }
+
+  formatCurrency_TaxableValue(event: any) {
+    var uy = new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(event.target.value);
+    this.taxableValue = uy;
   }
 
   onFileChange(event: any) {

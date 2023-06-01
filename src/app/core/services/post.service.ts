@@ -8,7 +8,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PostService {
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor(
+    private readonly httpClient: HttpClient,
+    private readonly socket: Socket
+  ) {}
 
   public update(id: string | null, data: any): Observable<any> {
     try {

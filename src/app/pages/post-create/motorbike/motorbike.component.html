@@ -188,8 +188,10 @@
           >
           <input
             class="form-control"
-            type="number"
+            type="text"
             formControlName="totalPrice"
+            [(ngModel)]="taxableValue"
+            (blur)="formatCurrency_TaxableValue($event)"
           />
           <div
             *ngIf="

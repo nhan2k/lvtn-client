@@ -38,10 +38,6 @@ export const brands: ISelect[] = [
     label: 'Hãng khác',
     value: 'Hãng khác',
   },
-  {
-    label: 'Honda',
-    value: 'Honda',
-  },
 ];
 
 export const typeMotorbikes: ISelect[] = [

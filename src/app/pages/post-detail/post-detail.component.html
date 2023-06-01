@@ -44,7 +44,7 @@
         <div class="card-body text-start">
           <h4 class="card-title mt-3">{{ post?.title }}</h4>
           <h5 class="card-title text-danger mb-3">
-            {{ post?.totalPrice | number : "1.0-0" }} đ
+            {{ post?.totalPrice | postCurrency }}
           </h5>
           <h5>Mô tả chi tiết</h5>
           <p class="card-text" [innerHTML]="post?.content"></p>

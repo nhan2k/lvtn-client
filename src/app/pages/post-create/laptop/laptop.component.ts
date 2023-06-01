@@ -50,7 +50,6 @@ export class PostCreateLaptopComponent {
   ) {
     this.myForm = this.formBuilder.group({
       categoryName: ['Laptop'],
-      type: ['Cần bán'],
       brand: ['Apple'],
       guarantee: ['1 tháng'],
       statusLaptop: ['Mới'],

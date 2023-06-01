@@ -19,6 +19,18 @@ export class postIsReviewPipe implements PipeTransform {
 }
 
 @Pipe({
+  name: 'postCurrency',
+})
+export class postCurrencyPipe implements PipeTransform {
+  transform(value: any, ...args: any[]): any {
+    return new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(value);
+  }
+}
+
+@Pipe({
   name: 'keyOfCategory',
 })
 export class keyOfCategoryPipe implements PipeTransform {
@@ -67,7 +79,7 @@ export class keyOfCategoryPipe implements PipeTransform {
       case 'juridical':
         return 'Giấy tờ pháp lý';
       case 'area':
-        return 'Diện tích';
+        return 'Diện tích (m2)';
       case 'address':
         return 'Địa chỉ';
       case 'codeHouse':
@@ -77,9 +89,9 @@ export class keyOfCategoryPipe implements PipeTransform {
       case 'numberOfFloor':
         return 'Số tầng';
       case 'height':
-        return 'Chiều dài';
+        return 'Chiều dài (m2)';
       case 'width':
-        return 'Chiều rộng';
+        return 'Chiều rộng (m2)';
       case 'typeGround':
         return 'Loại đất';
       case 'groundDirection':
