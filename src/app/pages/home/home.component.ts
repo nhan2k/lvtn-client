@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingService } from '@core/services/loading.service';
 import { PostService } from '@core/services/post.service';
+import { environment } from '@environment/environment.development';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +11,7 @@ import { PostService } from '@core/services/post.service';
 })
 export class HomeComponent implements OnInit {
   postList: any[] = [];
+  endpointURL: string = environment.imgUrl;
 
   constructor(
     private readonly router: Router,

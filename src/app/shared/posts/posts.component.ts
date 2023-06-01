@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { environment } from '@environment/environment.development';
 
 @Component({
   selector: 'app-posts',
@@ -6,6 +7,8 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./posts.component.scss'],
 })
 export class PostsComponent {
-  @Input() posts: IPost[] = [];
+  @Input() posts: any[] = [];
   @Input() title: string = '';
+
+  endpointURL: string = environment.imgUrl;
 }

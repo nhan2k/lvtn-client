@@ -10,15 +10,15 @@
           <div class="carousel-inner">
             <div
               *ngFor="let item of post?.imagePath; index as i"
-              class="carousel-item active mx-auto"
-              [class.my_class]="{ active: i === 0 }"
+              class="carousel-item"
+              [ngClass]="{ active: i === 0 }"
               style="width: 50rem; height: 30rem"
             >
               <img
-                [src]="'http://localhost:3000/' + item"
-                class="d-block w-100 h-100"
+                [src]="endpointURL + '/' + item"
+                class="d-block w-100 h-100 ms-5 ps-5"
                 style="object-fit: cover; object-position: center"
-                [alt]="'http://localhost:3000/' + item"
+                [alt]="endpointURL + '/' + item"
               />
             </div>
           </div>
@@ -41,9 +41,22 @@
             <span class="visually-hidden">Next</span>
           </button>
         </div>
-        <div class="card-body">
-          <h5 class="card-title">{{ post?.title }}</h5>
+        <div class="card-body text-start">
+          <h4 class="card-title mt-3">{{ post?.title }}</h4>
+          <h5 class="card-title text-danger mb-3">
+            {{ post?.totalPrice | number : "1.0-0" }} đ
+          </h5>
+          <h5>Mô tả chi tiết</h5>
           <p class="card-text" [innerHTML]="post?.content"></p>
+          <div class="text-left">
+            <div class="row gy-2">
+              <div *ngFor="let key of Object.keys(objCategory)" class="col-6">
+                <span>{{ key | keyOfCategory }}</span
+                >:
+                {{ objCategory[key] }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -68,13 +81,20 @@
               <span>{{ post?.userId?.phoneNumber }}</span>
             </div>
           </li>
+
+          <li class="list-group-item">
+            <div class="d-flex gap-3 align-items-center">
+              <i class="bi bi-info-square fs-4 px-3"></i>
+              <span>{{ post?.userId?.address }}</span>
+            </div>
+          </li>
           <li
             *ngIf="post?.userId?.email !== email"
             class="list-group-item active"
           >
             <a
               class="d-flex gap-3 align-items-center cursor-pointer"
-              (click)="onClickChat(post?.userId?._id)"
+              (click)="onClickChat(post?._id, post?.userId?._id)"
             >
               <i class="bi bi-chat-left-dots fs-4 px-3"></i>
               <span>Chat với người bán</span>

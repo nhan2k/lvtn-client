@@ -2,14 +2,19 @@ import { Component } from '@angular/core';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ISelect } from '@core/interfaces/category';
 import { categories } from '@core/values/categories';
-import { brands, yearOfManufactures } from '@core/values/car';
+import { yearOfManufactures } from '@core/values/car';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PostService } from '@core/services/post.service';
 import { ToastrService } from 'ngx-toastr';
 import { NotifyService } from '@core/services/notify.service';
 import { LoadingService } from '@core/services/loading.service';
-import { capacities, origins, typeMotorbikes } from '@core/values/motorbike';
+import {
+  brands,
+  capacities,
+  origins,
+  typeMotorbikes,
+} from '@core/values/motorbike';
 
 @Component({
   selector: 'app-motorbike',
@@ -54,6 +59,7 @@ export class PostCreateMotorbikeComponent {
       totalPrice: [0, Validators.min(0)],
       title: [null, Validators.required],
       content: [null, Validators.required],
+      image: [null, Validators.required],
     });
   }
 
@@ -99,30 +105,29 @@ export class PostCreateMotorbikeComponent {
   onSubmit(): void {
     this.errorMessage = null;
     if (this.myForm.valid) {
-      try {
-        this.loadingService.setLoading(true);
-        for (const key in this.myForm.value) {
-          if (Object.prototype.hasOwnProperty.call(this.myForm.value, key)) {
-            const element = this.myForm.value[key];
-            this.formData.append(key, element);
-          }
+      this.loadingService.setLoading(true);
+      for (const key in this.myForm.value) {
+        if (Object.prototype.hasOwnProperty.call(this.myForm.value, key)) {
+          const element = this.myForm.value[key];
+          this.formData.append(key, element);
         }
-        this.postService
-          .createPost(this.formData)
-          .subscribe((response: any) => {
-            this.toastrService.success('Tạo bài đăng thành công');
-            this.notifyService.sendNotify(
-              `Một bài đăng ${this.selectedCategory} được tạo ${JSON.stringify(
-                response
-              )}`
-            );
-            this.loadingService.setLoading(false);
-            this.router.navigate(['']);
-          });
-        this.loadingService.setLoading(false);
-      } catch (error) {
-        this.toastrService.error('Tạo bài đăng thất bại');
       }
+      this.postService.createPost(this.formData).subscribe(
+        (response: any) => {
+          this.toastrService.success('Tạo bài đăng thành công');
+          this.notifyService.sendNotify(
+            `Một bài đăng ${this.selectedCategory} được tạo ${JSON.stringify(
+              response
+            )}`
+          );
+          this.loadingService.setLoading(false);
+          this.router.navigate(['']);
+        },
+        (error) => {
+          this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+          this.loadingService.setLoading(false);
+        }
+      );
     } else {
       this.errorMessage = 'Form không hợp lệ vui lòng kiểm tra lại';
     }

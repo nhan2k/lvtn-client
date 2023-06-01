@@ -1,0 +1,170 @@
+<h3>Quản lý tin đăng</h3>
+
+<div class="row my-4">
+  <div class="col-12">
+    <ul class="nav nav-pills nav-fill">
+      <li class="nav-item">
+        <a
+          [ngClass]="{ active: status === 'show' }"
+          class="nav-link"
+          aria-current="page"
+          [routerLink]="['/post-manage']"
+          [queryParams]="{ status: 'show' }"
+          >Đang hiển thị</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          [ngClass]="{ active: status === 'hide' }"
+          class="nav-link"
+          [routerLink]="['/post-manage']"
+          [queryParams]="{ status: 'hide' }"
+          >Đang ẩn</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          [ngClass]="{ active: status === 'expired' }"
+          class="nav-link"
+          [routerLink]="['/post-manage']"
+          [queryParams]="{ status: 'expired' }"
+          >Hết hạn</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          [ngClass]="{ active: status === 'denined' }"
+          class="nav-link"
+          [routerLink]="['/post-manage']"
+          [queryParams]="{ status: 'denined' }"
+          >Bị từ chối</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+<hr />
+
+<div class="row">
+  <div class="col-12" *ngFor="let post of posts">
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <div style="height: 10rem">
+            <img
+              src="{{endpointURL+'/'+post?.imagePath?.[0]}}"
+              class="img-fluid rounded-start w-100 h-100"
+              style="object-fit: cover; object-position: center"
+              alt="{{endpointURL+'/'+post?.imagePath?.[0]}}"
+            />
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title">{{ post?.title }}</h5>
+              <div class="d-flex gap-2">
+                <a
+                  [routerLink]="['/post-detail']"
+                  [queryParams]="{ id: post?._id }"
+                  class="btn btn-info"
+                >
+                  Xem
+                </a>
+                <button
+                  *ngIf="status === 'show'"
+                  class="btn btn-outline-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  (click)="onClickAction(post?._id)"
+                >
+                  Ẩn tin
+                </button>
+
+                <div *ngIf="status === 'hide'">
+                  <button
+                    *ngIf="post?.isReview; else templatePending"
+                    class="btn btn-outline-success"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                    (click)="onClickAction(post?._id)"
+                  >
+                    Hiện tin
+                  </button>
+
+                  <ng-template #templatePending>
+                    <button disabled class="btn btn-secondary">
+                      Chờ duyệt
+                    </button>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <p class="card-text">{{ post?.totalPrice | number : "1.0-0" }} đ</p>
+            <p class="card-text">
+              <small class="text-body-secondary">{{
+                post?.createdAt | timeAgo
+              }}</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Cập nhật tin
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p *ngIf="status === 'show'">Bạn có chắc muốn ẩn tin này?</p>
+            <p *ngIf="status === 'hide'">Bạn có chắc muốn hiện tin này?</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Đóng
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              *ngIf="status === 'show'"
+              (click)="onClickUpdateStatus('hide')"
+              data-bs-dismiss="modal"
+            >
+              Lưu thay đổi
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              *ngIf="status === 'hide'"
+              (click)="onClickUpdateStatus('show')"
+              data-bs-dismiss="modal"
+            >
+              Lưu thay đổi
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -30,6 +30,10 @@ import { PostCreateElectricBicycleComponent } from './pages/post-create/electric
 import { PostDetailComponent } from './pages/post-detail/post-detail.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { PostManageComponent } from './pages/post-manage/post-manage.component';
+import { PostCategoryComponent } from './pages/post-category/post-category.component';
+import { PostsComponent } from './shared/posts/posts.component';
+import { PostSearchComponent } from './pages/post-search/post-search.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -55,6 +59,10 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     PostDetailComponent,
     ChatComponent,
     RegisterComponent,
+    PostManageComponent,
+    PostCategoryComponent,
+    PostsComponent,
+    PostSearchComponent,
   ],
   imports: [
     BrowserModule,

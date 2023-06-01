@@ -1,7 +1,11 @@
 <h5>Khám phá danh mục</h5>
 <div class="container text-center">
   <div class="row gap-5 my-5">
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Chung cư' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/chungcu.jpg"
@@ -21,7 +25,11 @@
         </div>
       </div>
     </div>
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Đất' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/dat.jpg"
@@ -41,7 +49,11 @@
         </div>
       </div>
     </div>
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Điện thoại' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/dienthoai.jpg"
@@ -61,7 +73,11 @@
         </div>
       </div>
     </div>
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Laptop' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/laptop.jpg"
@@ -81,7 +97,11 @@
         </div>
       </div>
     </div>
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Nhà ở' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/nha.jpg"
@@ -97,13 +117,17 @@
       </div>
       <div>
         <div class="card-body my-2">
-          <p class="card-text fs-5">Nhà</p>
+          <p class="card-text fs-5">Nhà ở</p>
         </div>
       </div>
     </div>
   </div>
   <div class="row gap-5 my-5">
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Phòng trọ' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/phongtro.jpg"
@@ -123,7 +147,11 @@
         </div>
       </div>
     </div>
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Văn phòng' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/vanphong.jpg"
@@ -143,7 +171,11 @@
         </div>
       </div>
     </div>
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Xe điện' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/xedien.jpg"
@@ -163,7 +195,11 @@
         </div>
       </div>
     </div>
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Xe hơi' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/xehoi.jpg"
@@ -183,7 +219,11 @@
         </div>
       </div>
     </div>
-    <div class="col-2 border rounded cursor-pointer">
+    <div
+      class="col-2 border rounded cursor-pointer"
+      [routerLink]="['/category']"
+      [queryParams]="{ name: 'Xe máy' }"
+    >
       <div class="card border-0 mx-auto" style="width: 10rem">
         <img
           src="assets/images/category/xemay.jpg"
@@ -206,37 +246,4 @@
   </div>
 </div>
 
-<h5>Tin đăng mới</h5>
-<div class="container">
-  <div class="row gap-5 my-5">
-    <div
-      *ngFor="let post of postList"
-      class="col-2 border rounded cursor-pointer"
-      [routerLink]="['/post-detail']"
-      [queryParams]="{ id: post?._id }"
-    >
-      <div class="card border-0 mx-auto text-center" style="width: 10rem">
-        <img
-          src="assets/images/category/chungcu.jpg"
-          class="card-img-top"
-          alt="assets/images/category/batdongsan.jpg"
-          style="
-            width: 10rem;
-            object-fit: cover;
-            object-position: center;
-            height: 10rem;
-          "
-        />
-      </div>
-      <div>
-        <div class="card-body my-2">
-          <p class="card-text fs-5">{{ post.title }}</p>
-          <p class="card-text fs-5 text-danger">{{ post.totalPrice }} đ</p>
-          <p class="card-text fs-5 text-secondary">
-            {{ post.createdAt | timeAgo }}
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<app-posts [posts]="postList" [title]="'Tin đăng mới'"></app-posts>

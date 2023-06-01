@@ -9,32 +9,82 @@
       >Nhập số điện thoại<span class="error-message">*</span></label
     >
     <input type="text" class="form-control" formControlName="phoneNumber" />
+    <div
+      *ngIf="
+        registerForm.get('phoneNumber')?.invalid &&
+        registerForm.get('phoneNumber')?.touched
+      "
+      class="error-message"
+    >
+      Số điện thoại không hợp lệ
+    </div>
   </div>
   <div class="mb-3">
     <label class="form-label"
       >Nhập mật khẩu<span class="error-message">*</span></label
     >
-    <input type="password" class="form-control" formControlName="password" />
+    <input
+      type="password"
+      class="form-control"
+      formControlName="password"
+      placeholder="Tối thiểu 4 kí tự"
+    />
+    <div
+      *ngIf="
+        registerForm.get('password')?.invalid &&
+        registerForm.get('password')?.touched
+      "
+      class="error-message"
+    >
+      Mật khẩu tối thiếu 4 kí tự
+    </div>
   </div>
   <div class="mb-3">
     <label class="form-label"
       >Nhập email<span class="error-message">*</span></label
     >
     <input type="email" class="form-control" formControlName="email" />
+    <div
+      *ngIf="
+        registerForm.get('email')?.invalid && registerForm.get('email')?.touched
+      "
+      class="error-message"
+    >
+      Email không hợp lệ
+    </div>
   </div>
   <div class="mb-3">
     <label class="form-label"
       >Nhập họ tên<span class="error-message">*</span></label
     >
     <input type="text" class="form-control" formControlName="fullName" />
+    <div
+      *ngIf="
+        registerForm.get('fullName')?.invalid &&
+        registerForm.get('fullName')?.touched
+      "
+      class="error-message"
+    >
+      Họ tên tối thiếu 4 kí tự
+    </div>
   </div>
   <div class="mb-3">
     <label class="form-label"
       >Nhập địa chỉ<span class="error-message">*</span></label
     >
-    <input type="text" class="form-control" formControlName="address" />
+    <textarea class="form-control" formControlName="address"></textarea>
+    <div
+      *ngIf="
+        registerForm.get('address')?.invalid &&
+        registerForm.get('address')?.touched
+      "
+      class="error-message"
+    >
+      Địa chỉ tối thiếu 4 kí tự
+    </div>
   </div>
-  <button type="submit" class="btn btn-primary" [routerLink]="['/register']">
-    Đăng ký
-  </button>
+  <button type="submit" class="btn btn-primary">Đăng ký</button>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
 </form>

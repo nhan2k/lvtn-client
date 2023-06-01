@@ -7,9 +7,10 @@
   position: relative;
   width: 100%;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
+  min-height: 44rem;
 }
 .chat-app .people-list {
-  width: 280px;
+  width: 400px;
   position: absolute;
   left: 0;
   top: 0;
@@ -18,8 +19,9 @@
 }
 
 .chat-app .chat {
-  margin-left: 280px;
+  margin-left: 400px;
   border-left: 1px solid #eaeaea;
+  min-height: 44rem;
 }
 
 .people-list {
@@ -27,6 +29,8 @@
   -o-transition: 0.5s;
   -webkit-transition: 0.5s;
   transition: 0.5s;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .people-list .chat-list li {
@@ -87,6 +91,8 @@
 .chat .chat-history {
   padding: 20px;
   border-bottom: 2px solid #fff;
+  min-height: 34rem;
+  overflow-y: auto;
 }
 
 .chat .chat-history ul {

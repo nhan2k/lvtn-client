@@ -62,6 +62,7 @@ export class PostCreateLaptopComponent {
       totalPrice: [0, Validators.min(0)],
       title: [null, Validators.required],
       content: [null, Validators.required],
+      image: [null, Validators.required],
     });
   }
 
@@ -106,30 +107,29 @@ export class PostCreateLaptopComponent {
   onSubmit(): void {
     this.errorMessage = null;
     if (this.myForm.valid) {
-      try {
-        this.loadingService.setLoading(true);
-        for (const key in this.myForm.value) {
-          if (Object.prototype.hasOwnProperty.call(this.myForm.value, key)) {
-            const element = this.myForm.value[key];
-            this.formData.append(key, element);
-          }
+      this.loadingService.setLoading(true);
+      for (const key in this.myForm.value) {
+        if (Object.prototype.hasOwnProperty.call(this.myForm.value, key)) {
+          const element = this.myForm.value[key];
+          this.formData.append(key, element);
         }
-        this.postService
-          .createPost(this.formData)
-          .subscribe((response: any) => {
-            this.toastrService.success('Tạo bài đăng thành công');
-            this.notifyService.sendNotify(
-              `Một bài đăng ${this.selectedCategory} được tạo ${JSON.stringify(
-                response
-              )}`
-            );
-            this.loadingService.setLoading(false);
-            this.router.navigate(['']);
-          });
-        this.loadingService.setLoading(false);
-      } catch (error) {
-        this.toastrService.error('Tạo bài đăng thất bại');
       }
+      this.postService.createPost(this.formData).subscribe(
+        (response: any) => {
+          this.toastrService.success('Tạo bài đăng thành công');
+          this.notifyService.sendNotify(
+            `Một bài đăng ${this.selectedCategory} được tạo ${JSON.stringify(
+              response
+            )}`
+          );
+          this.loadingService.setLoading(false);
+          this.router.navigate(['']);
+        },
+        (error) => {
+          this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+          this.loadingService.setLoading(false);
+        }
+      );
     } else {
       this.errorMessage = 'Form không hợp lệ vui lòng kiểm tra lại';
     }

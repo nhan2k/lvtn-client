@@ -4,6 +4,7 @@ import { AuthService } from '@core/services/auth.service';
 import { ChatService } from '@core/services/chat.service';
 import { LoadingService } from '@core/services/loading.service';
 import { PostService } from '@core/services/post.service';
+import { environment } from '@environment/environment.development';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -15,6 +16,10 @@ export class PostDetailComponent implements OnInit {
   id: string | null = null;
   post: any;
   email: string | null = null;
+  endpointURL: string = environment.imgUrl;
+
+  objCategory: Object | any = {};
+  Object = Object;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -23,17 +28,37 @@ export class PostDetailComponent implements OnInit {
     private readonly loadingService: LoadingService,
     private readonly toastrService: ToastrService,
     private readonly authService: AuthService,
-    private readonly chatService:ChatService
+    private readonly chatService: ChatService
   ) {}
   ngOnInit(): void {
     this.email = this.authService.getEmail();
 
-    this.route.queryParams.subscribe((params) => {
-      this.id = params['id'];
-      this.postService.getOne(params['id']).subscribe((data) => {
-        this.post = data;
-      });
-    });
+    this.route.queryParams.subscribe(
+      (params) => {
+        this.id = params['id'];
+        this.postService.getOne(params['id']).subscribe(
+          (data) => {
+            this.post = data;
+
+            for (const key in data) {
+              if (Object.prototype.hasOwnProperty.call(data, key)) {
+                if (key.includes('PostId') && data[key]) {
+                  this.objCategory = data[key];
+                }
+              }
+            }
+          },
+          (error) => {
+            this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+            this.loadingService.setLoading(false);
+          }
+        );
+      },
+      (error) => {
+        this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+        this.loadingService.setLoading(false);
+      }
+    );
   }
 
   onClickApproved() {
@@ -42,21 +67,25 @@ export class PostDetailComponent implements OnInit {
       isReview: true,
       status: 'show',
     };
-    this.postService.approved(this.id, data).subscribe((data) => {
+    this.postService.update(this.id, data).subscribe((data) => {
       this.loadingService.setLoading(false);
       this.toastrService.success('Duyệt tin thành công');
     });
   }
 
-  onClickChat(userId: string) {
+  onClickChat(postId: string, sellerId: string) {
     if (this.authService.getToken()) {
       this.loadingService.setLoading(true);
-      this.chatService.createGroup(userId)?.subscribe((response:any) => {
-        console.log("🚀 ~ file: post-detail.component.ts:55 ~ PostDetailComponent ~ this.chatService.createGroup ~ response:", response)
-        
-        this.router.navigate(['/chat']);
-      this.loadingService.setLoading(false);
-    })
+      this.chatService
+        .createGroup({ postId, sellerId })
+        ?.subscribe((response: any) => {
+          if (response?._id) {
+            this.router.navigate(['/chat'], {
+              queryParams: { groupId: response?._id },
+            });
+            this.loadingService.setLoading(false);
+          }
+        });
     } else {
       this.router.navigate(['/login']);
     }

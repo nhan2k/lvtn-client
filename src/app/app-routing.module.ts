@@ -17,6 +17,9 @@ import { PostCreateElectricBicycleComponent } from './pages/post-create/electric
 import { PostDetailComponent } from './pages/post-detail/post-detail.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { PostManageComponent } from './pages/post-manage/post-manage.component';
+import { PostCategoryComponent } from './pages/post-category/post-category.component';
+import { PostSearchComponent } from './pages/post-search/post-search.component';
 
 const routes: Routes = [
   {
@@ -86,6 +89,18 @@ const routes: Routes = [
       {
         path: 'chat',
         component: ChatComponent,
+      },
+      {
+        path: 'post-manage',
+        component: PostManageComponent,
+      },
+      {
+        path: 'category',
+        component: PostCategoryComponent,
+      },
+      {
+        path: 'posts',
+        component: PostSearchComponent,
       },
     ],
   },

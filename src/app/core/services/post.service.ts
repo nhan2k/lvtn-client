@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class PostService {
   constructor(private readonly httpClient: HttpClient) {}
 
-  public approved(id: string | null, data: any): Observable<any> {
+  public update(id: string | null, data: any): Observable<any> {
     try {
       return this.httpClient.patch(`${environment.apiUrl}/post/${id}`, data);
     } catch (error) {
@@ -26,9 +26,25 @@ export class PostService {
     }
   }
 
-  public getAll(): Observable<any> {
+  public getAll(category?: string): Observable<any> {
     try {
-      return this.httpClient.get(`${environment.apiUrl}/post`);
+      return this.httpClient.get(`${environment.apiUrl}/post`, {
+        params: {
+          name: category || '',
+        },
+      });
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  public getAllBySeller(status: string): Observable<any> {
+    try {
+      return this.httpClient.get(`${environment.apiUrl}/post/user`, {
+        params: {
+          status,
+        },
+      });
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -42,29 +58,7 @@ export class PostService {
     }
   }
 
-  public createPost(
-    data:
-      | {
-          categoryName: string;
-          type: string;
-          nameOfBuilding: string;
-          address: string;
-          codeOfBuilding: string;
-          block: string;
-          floor: number;
-          typeOfBuilding: string;
-          numberOfBedroom: number;
-          numberOfBathroom: number;
-          balconnyDirection: string;
-          doorDirection: string;
-          interiorCondition: string;
-          juridical: string;
-          area: number;
-          title: string;
-          content: string;
-        }
-      | any
-  ): Observable<any> {
+  public createPost(data: any): Observable<any> {
     try {
       return this.httpClient.post(`${environment.apiUrl}/post`, data);
     } catch (error) {
@@ -72,9 +66,13 @@ export class PostService {
     }
   }
 
-  public upload(data: any) {
+  public search(keyword: string): Observable<any> {
     try {
-      return this.httpClient.post(`${environment.apiUrl}/post/uploads`, data);
+      return this.httpClient.get(`${environment.apiUrl}/post/search`, {
+        params: {
+          keyword,
+        },
+      });
     } catch (error) {
       throw new Error((error as any).message);
     }

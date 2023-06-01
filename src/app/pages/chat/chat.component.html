@@ -12,16 +12,20 @@
           <ul class="list-unstyled chat-list mt-2 mb-0">
             <li
               *ngFor="let item of groups; index as i"
-              [ngClass]="{ active: i === 0 }"
+              [ngClass]="{ active: item._id === groupId }"
               class="clearfix my-2"
+              (click)="onChangeUser(item._id)"
             >
+              <h6 class="text-truncate" style="max-height: 1.6rem">
+                {{ item?.postId?.title }}
+              </h6>
               <img
                 src="https://bootdey.com/img/Content/avatar/avatar2.png"
                 alt="avatar"
               />
               <div class="about">
                 <div
-                  class="name"
+                  class="name w-100"
                   *ngIf="
                     item?.sellerId?.fullName === currentUser;
                     else templateCurrentUser
@@ -29,9 +33,8 @@
                 >
                   {{ item?.sellerId?.fullName }}
                 </div>
-
                 <ng-template #templateCurrentUser>
-                  <div class="name">{{ item?.buyerId?.fullName }}</div>
+                  <div class="name w-100">{{ item?.buyerId?.fullName }}</div>
                 </ng-template>
               </div>
             </li>
@@ -49,6 +52,7 @@
                   <img
                     src="https://bootdey.com/img/Content/avatar/avatar2.png"
                     alt="avatar"
+                    *ngIf="groupId"
                   />
                 </a>
                 <div class="chat-about">
@@ -57,11 +61,7 @@
               </div>
             </div>
           </div>
-          <div
-            class="chat-history"
-            style="max-height: 34rem; overflow-y: auto"
-            #scrollMe
-          >
+          <div class="chat-history" #scrollMe>
             <ul class="m-b-0">
               <li class="clearfix" *ngFor="let message of messages">
                 <div
@@ -97,7 +97,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Enter text here..."
+                  placeholder="Nhập tin nhắn..."
                   formControlName="text"
                 />
                 <div class="input-group-prepend d-flex border rounded">

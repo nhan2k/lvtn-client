@@ -24,12 +24,12 @@ export class LoginComponent {
   ) {}
 
   onSubmit(): void {
-    try {
-      const credentials = {
-        phoneNumber: this.loginForm.value.phoneNumber || undefined,
-        password: this.loginForm.value.password || undefined,
-      };
-      this.authService.login(credentials).subscribe((response) => {
+    const credentials = {
+      phoneNumber: this.loginForm.value.phoneNumber || undefined,
+      password: this.loginForm.value.password || undefined,
+    };
+    this.authService.login(credentials).subscribe(
+      (response) => {
         if (response.role !== 'user') {
           this.toastrService.error('Đăng nhập thất bại');
         } else {
@@ -37,10 +37,10 @@ export class LoginComponent {
           this.router.navigate(['/']);
           this.toastrService.success('Đăng nhập thành công');
         }
-      });
-    } catch (error) {
-      this.toastrService.error('Đăng nhập thất bại');
-      throw new Error((error as any).message);
-    }
+      },
+      (error) => {
+        this.toastrService.error('Đăng nhập thất bại ' + error.error.message);
+      }
+    );
   }
 }

@@ -8,9 +8,18 @@ import { environment } from '@environment/environment.development';
 export class ChatService {
   constructor(private readonly httpClient: HttpClient) {}
 
-  public createGroup(_id: string) {
+  public createGroup({
+    postId,
+    sellerId,
+  }: {
+    postId: string;
+    sellerId: string;
+  }) {
     try {
-      return this.httpClient.post(`${environment.apiUrl}/chat`, { _id });
+      return this.httpClient.post(`${environment.apiUrl}/chat`, {
+        postId,
+        sellerId,
+      });
     } catch (error) {
       throw new Error((error as Error).message);
     }
