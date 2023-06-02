@@ -24,14 +24,13 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   groups: any[] = [];
   currentUser: string = '';
-  currentUserFullName: string = '';
   messages: any[] = [];
   myEmail: string | null = null;
 
   formData: FormData = new FormData();
   myForm: FormGroup;
 
-  groupId: string | null = null;
+  groupId: string = '';
 
   token: string | null;
 
@@ -54,19 +53,12 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
   ngOnInit(): void {
     this.loadingService.setLoading(true);
+    this.myEmail = this.authService.getEmail();
+
     this.route.queryParams.subscribe({
       next: (params) => {
         if (params['groupId']) {
           this.groupId = params['groupId'];
-          this.chatService.getAllMessages(params['groupId']).subscribe({
-            next: (response: any) => {
-              this.messages = response;
-            },
-            error: (error) => {
-              this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
-              this.loadingService.setLoading(false);
-            },
-          });
         } else {
           this.loadingService.setLoading(false);
         }
@@ -77,8 +69,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       },
     });
 
-    this.myEmail = this.authService.getEmail();
-
     this.chatService.getAllGroup().subscribe({
       next: (response: any) => {
         if (response.length === 0) {
@@ -87,7 +77,26 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
         this.groups = response;
 
+        const filterGroup = response.filter(
+          (res: any) => res._id === this.groupId
+        )[0];
+
+        this.currentUser =
+          filterGroup?.buyerId?.email === this.myEmail
+            ? filterGroup?.sellerId?.fullName
+            : filterGroup?.buyerId?.fullName;
+
         this.loadingService.setLoading(false);
+      },
+      error: (error) => {
+        this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+        this.loadingService.setLoading(false);
+      },
+    });
+
+    this.chatService.getAllMessages(this.groupId).subscribe({
+      next: (response: any) => {
+        this.messages = response;
       },
       error: (error) => {
         this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
@@ -111,19 +120,11 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         }
       }
 
-      this.chatService
-        .createMessage({
-          ...this.myForm.value,
-          groupId: this.groupId,
-          token: this.token,
-        })
-        .subscribe({
-          next: (response) => {},
-          error: (error) => {
-            this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
-            this.loadingService.setLoading(false);
-          },
-        });
+      this.chatService.createMessage({
+        ...this.myForm.value,
+        groupId: this.groupId,
+        token: this.token,
+      });
       this.myForm.reset();
     }
   }
@@ -142,6 +143,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   onChangeUser(groupId: string, userName: string) {
     this.loadingService.setLoading(true);
     this.currentUser = userName;
+
     this.router
       .navigate(['/chat'], {
         queryParams: { groupId: groupId },

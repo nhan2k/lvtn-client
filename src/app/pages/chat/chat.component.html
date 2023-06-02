@@ -14,7 +14,14 @@
               *ngFor="let item of groups; index as i"
               [ngClass]="{ active: item._id === groupId }"
               class="clearfix my-2"
-              (click)="onChangeUser(item._id, item?.postId?.userId?.fullName)"
+              (click)="
+                onChangeUser(
+                  item._id,
+                  item?.buyerId?.email === this.myEmail
+                    ? item?.sellerId?.fullName
+                    : item?.buyerId?.fullName
+                )
+              "
             >
               <h6 class="text-truncate" style="max-height: 1.6rem">
                 {{ item?.postId?.title }}
@@ -25,7 +32,11 @@
               />
               <div class="about">
                 <div class="name w-100">
-                  {{ item?.postId?.userId?.fullName }}
+                  {{
+                    item?.buyerId?.email === this.myEmail
+                      ? item?.sellerId?.fullName
+                      : item?.buyerId?.fullName
+                  }}
                 </div>
               </div>
             </li>
@@ -56,13 +67,20 @@
             <ul class="m-b-0">
               <li class="clearfix" *ngFor="let message of messages">
                 <div
-                  class="message other-message float-right"
+                  class="float-right"
                   *ngIf="
                     message?.userId?.fullName !== currentUser;
                     else template
                   "
                 >
-                  {{ message.text }}
+                  <div class="message-data">
+                    <span class="message-data-time">{{
+                      message?.createdAt | date : "dd/MM h:mm a"
+                    }}</span>
+                  </div>
+                  <div class="message other-message float-right">
+                    {{ message.text }}
+                  </div>
                 </div>
 
                 <ng-template #template>
