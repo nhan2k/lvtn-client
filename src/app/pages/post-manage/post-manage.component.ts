@@ -57,12 +57,18 @@ export class PostManageComponent implements OnInit {
       .update(this.idChoose, {
         status,
       })
-      .subscribe((response) => {
-        this.loadingService.setLoading(false);
-        this.posts = this.posts.filter((post) => post?._id !== response?._id);
-        this.toastrService.success(
-          `${status === 'show' ? 'Ẩn ' : 'Hiện'} tin thành công`
-        );
+      .subscribe({
+        next: (response) => {
+          this.loadingService.setLoading(false);
+          this.posts = this.posts.filter((post) => post?._id !== response?._id);
+          this.toastrService.success(
+            `${status === 'show' ? 'Ẩn ' : 'Hiện'} tin thành công`
+          );
+        },
+        error: (error) => {
+          this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+          this.loadingService.setLoading(false);
+        },
       });
   }
 }

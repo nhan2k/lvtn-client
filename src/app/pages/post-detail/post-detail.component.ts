@@ -62,18 +62,6 @@ export class PostDetailComponent implements OnInit {
     });
   }
 
-  onClickApproved() {
-    this.loadingService.setLoading(true);
-    const data = {
-      isReview: true,
-      status: 'show',
-    };
-    this.postService.update(this.id, data).subscribe((data) => {
-      this.loadingService.setLoading(false);
-      this.toastrService.success('Duyệt tin thành công');
-    });
-  }
-
   onClickChat(postId: string, sellerId: string) {
     if (this.authService.getToken()) {
       this.loadingService.setLoading(true);

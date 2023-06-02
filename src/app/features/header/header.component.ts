@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { ChatService } from '@core/services/chat.service';
 import { LoadingService } from '@core/services/loading.service';
+import { Socket } from 'ngx-socket-io';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -21,7 +22,8 @@ export class HeaderComponent implements OnInit {
     private readonly router: Router,
     private readonly loadingService: LoadingService,
     private readonly chatService: ChatService,
-    private readonly toastrService: ToastrService
+    private readonly toastrService: ToastrService,
+    private readonly socket: Socket
   ) {
     this.myForm = this.formBuilder.group({
       keyword: [null, Validators.required],
@@ -31,6 +33,17 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.getToken()) {
       this.isLoggined = true;
+    }
+
+    const email = this.authService.getEmail();
+    if (email) {
+      this.socket.on('receivedPostApprove', (data: any) => {
+        data.join(email);
+        console.log(
+          '🚀 ~ file: header.component.ts:41 ~ HeaderComponent ~ this.socket.on ~ data:',
+          data
+        );
+      });
     }
   }
 
