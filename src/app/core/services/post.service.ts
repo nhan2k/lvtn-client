@@ -28,12 +28,10 @@ export class PostService {
     }
   }
 
-  public getAll(category?: string): Observable<any> {
+  public getAll(filterParams: any): Observable<any> {
     try {
       return this.httpClient.get(`post`, {
-        params: {
-          name: category || '',
-        },
+        params: filterParams,
       });
     } catch (error) {
       throw new Error((error as any).message);

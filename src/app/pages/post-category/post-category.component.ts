@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 export class PostCategoryComponent implements OnInit {
   postList: any[] = [];
   category: string = '';
+  params: any;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -22,24 +23,25 @@ export class PostCategoryComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.loadingService.setLoading(true);
-    this.route.queryParams.subscribe(
-      (params) => {
+    this.route.queryParams.subscribe({
+      next: (params) => {
+        this.params = params;
         this.category = params['name'];
-        this.postService.getAll(params['name']).subscribe(
-          (data) => {
+        this.postService.getAll(params).subscribe({
+          next: (data) => {
             this.postList = data;
             this.loadingService.setLoading(false);
           },
-          (error) => {
+          error: (error) => {
             this.toastrService.error(message);
             this.loadingService.setLoading(false);
-          }
-        );
+          },
+        });
       },
-      (error) => {
+      error: (error) => {
         this.toastrService.error(message);
         this.loadingService.setLoading(false);
-      }
-    );
+      },
+    });
   }
 }
