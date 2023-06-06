@@ -6,7 +6,7 @@
 >
   <div class="mb-3">
     <label class="form-label"
-      >Nhập số điện thoại<span class="error-message">*</span></label
+      >Nhập số điện thoại<span class="text-danger">*</span></label
     >
     <input type="text" class="form-control" formControlName="phoneNumber" />
     <div
@@ -14,14 +14,14 @@
         registerForm.get('phoneNumber')?.invalid &&
         registerForm.get('phoneNumber')?.touched
       "
-      class="error-message"
+      class="text-danger"
     >
       Số điện thoại không hợp lệ
     </div>
   </div>
   <div class="mb-3">
     <label class="form-label"
-      >Nhập mật khẩu<span class="error-message">*</span></label
+      >Nhập mật khẩu<span class="text-danger">*</span></label
     >
     <input
       type="password"
@@ -34,28 +34,28 @@
         registerForm.get('password')?.invalid &&
         registerForm.get('password')?.touched
       "
-      class="error-message"
+      class="text-danger"
     >
       Mật khẩu tối thiếu 4 kí tự
     </div>
   </div>
   <div class="mb-3">
     <label class="form-label"
-      >Nhập email<span class="error-message">*</span></label
+      >Nhập email<span class="text-danger">*</span></label
     >
     <input type="email" class="form-control" formControlName="email" />
     <div
       *ngIf="
         registerForm.get('email')?.invalid && registerForm.get('email')?.touched
       "
-      class="error-message"
+      class="text-danger"
     >
       Email không hợp lệ
     </div>
   </div>
   <div class="mb-3">
     <label class="form-label"
-      >Nhập họ tên<span class="error-message">*</span></label
+      >Nhập họ tên<span class="text-danger">*</span></label
     >
     <input type="text" class="form-control" formControlName="fullName" />
     <div
@@ -63,28 +63,76 @@
         registerForm.get('fullName')?.invalid &&
         registerForm.get('fullName')?.touched
       "
-      class="error-message"
+      class="text-danger"
     >
       Họ tên tối thiếu 4 kí tự
     </div>
   </div>
+
   <div class="mb-3">
     <label class="form-label"
-      >Nhập địa chỉ<span class="error-message">*</span></label
+      >Tỉnh thành phố<span class="text-danger">*</span></label
     >
-    <textarea class="form-control" formControlName="address"></textarea>
+    <select class="form-select" (change)="onProvincesChange($event)">
+      <option selected>Chọn tỉnh thành phố</option>
+      <option *ngFor="let province of provinces" value="{{ province.value }}">
+        {{ province.label }}
+      </option>
+    </select>
+    <input
+      class="visually-hidden"
+      type="text"
+      formControlName="province"
+      [value]="province"
+    />
+    <div
+      *ngIf="
+        registerForm.get('province')?.invalid &&
+        registerForm.get('province')?.touched
+      "
+      class="text-danger"
+    >
+      Vui lòng chọn tỉnh thành phố
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label"
+      >Quận huyện<span class="text-danger">*</span></label
+    >
+    <select class="form-select" formControlName="district">
+      <option *ngFor="let district of districts" value="{{ district.label }}">
+        {{ district.label }}
+      </option>
+    </select>
+
+    <div
+      *ngIf="
+        registerForm.get('district')?.invalid &&
+        registerForm.get('district')?.touched
+      "
+      class="text-danger"
+    >
+      Vui lòng chọn tỉnh quận huyện
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập địa chỉ<span class="text-danger">*</span></label
+    >
+    <input class="form-control" formControlName="address" />
     <div
       *ngIf="
         registerForm.get('address')?.invalid &&
         registerForm.get('address')?.touched
       "
-      class="error-message"
+      class="text-danger"
     >
       Địa chỉ tối thiếu 4 kí tự
     </div>
   </div>
   <button type="submit" class="btn btn-primary">Đăng ký</button>
-  <div *ngIf="errorMessage" class="error-message">
+  <div *ngIf="errorMessage" class="text-danger">
     {{ errorMessage }}
   </div>
 </form>

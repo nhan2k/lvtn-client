@@ -3,7 +3,7 @@
     <div class="col-4">
       <div class="my-2">
         <label for="formFile" class="form-label"
-          >Ảnh sản phẩm<span class="error-message">*</span></label
+          >Ảnh sản phẩm<span class="text-danger">*</span></label
         >
         <input
           class="form-control"
@@ -11,7 +11,6 @@
           id="formFile"
           multiple
           (change)="onFileChange($event)"
-          formControlName="image"
         />
       </div>
       <div class="row">
@@ -30,7 +29,7 @@
 
         <div
           *ngIf="myForm.get('image')?.invalid && myForm.get('image')?.touched"
-          class="error-message"
+          class="text-danger"
         >
           Vui lòng chọn hình
         </div>
@@ -79,24 +78,85 @@
           <label class="form-check-label">Cho thuê</label>
         </div>
 
-        <div class="my-2 col-12">
+        <div class="mb-3">
           <label class="form-label"
-            >Địa chỉ<span class="error-message">*</span></label
+            >Tỉnh thành phố<span class="text-danger">*</span></label
           >
-          <textarea class="form-control" formControlName="address"></textarea>
+          <select class="form-select" (change)="onProvincesChange($event)">
+            <option selected>Chọn tỉnh thành phố</option>
+            <option
+              *ngFor="let province of provinces"
+              value="{{ province.value }}"
+            >
+              {{ province.label }}
+            </option>
+          </select>
+          <input
+            class="visually-hidden"
+            type="text"
+            formControlName="province"
+            [value]="province"
+          />
+          <div
+            *ngIf="
+              myForm.get('province')?.invalid && myForm.get('province')?.touched
+            "
+            class="text-danger"
+          >
+            Vui lòng chọn tỉnh thành phố
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Quận huyện<span class="text-danger">*</span></label
+          >
+          <select class="form-select" formControlName="district">
+            <option
+              *ngFor="let district of districts"
+              value="{{ district.label }}"
+            >
+              {{ district.label }}
+            </option>
+          </select>
+
+          <div
+            *ngIf="
+              myForm.get('district')?.invalid && myForm.get('district')?.touched
+            "
+            class="text-danger"
+          >
+            Vui lòng chọn tỉnh quận huyện
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label"
+            >Nhập địa chỉ<span class="text-danger">*</span></label
+          >
+          <input class="form-control" formControlName="addressInForm" />
+          <div
+            *ngIf="
+              myForm.get('addressInForm')?.invalid &&
+              myForm.get('addressInForm')?.touched
+            "
+            class="text-danger"
+          >
+            Địa chỉ tối thiếu 4 kí tự
+          </div>
         </div>
         <div
           *ngIf="
-            myForm.get('address')?.invalid && myForm.get('address')?.touched
+            myForm.get('addressInForm')?.invalid &&
+            myForm.get('addressInForm')?.touched
           "
-          class="error-message"
+          class="text-danger"
         >
           Trường bắt buộc nhập
         </div>
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Tình trạng nội thất<span class="error-message">*</span></label
+            >Tình trạng nội thất<span class="text-danger">*</span></label
           >
           <select
             formControlName="interiorCondition"
@@ -115,7 +175,7 @@
               myForm.get('interiorCondition')?.invalid &&
               myForm.get('interiorCondition')?.touched
             "
-            class="error-message"
+            class="text-danger"
           >
             Trường bắt buộc nhập
           </div>
@@ -123,12 +183,12 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Diện tích<span class="error-message">*</span></label
+            >Diện tích<span class="text-danger">*</span></label
           >
           <input class="form-control" type="number" formControlName="area" />
           <div
             *ngIf="myForm.get('area')?.invalid && myForm.get('area')?.touched"
-            class="error-message"
+            class="text-danger"
           >
             Trường bắt buộc nhập
           </div>
@@ -136,14 +196,14 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Số tiền cọc<span class="error-message">*</span></label
+            >Số tiền cọc<span class="text-danger">*</span></label
           >
           <input class="form-control" type="number" formControlName="deposit" />
           <div
             *ngIf="
               myForm.get('deposit')?.invalid && myForm.get('deposit')?.touched
             "
-            class="error-message"
+            class="text-danger"
           >
             Trường bắt buộc nhập
           </div>
@@ -151,19 +211,21 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Giá<span class="error-message">*</span></label
+            >Giá<span class="text-danger">*</span></label
           >
           <input
             class="form-control"
             type="number"
             formControlName="totalPrice"
+            (blur)="formatCurrency_TaxableValue($event)"
           />
+          <div class="mt-1">Giá (VND): {{ taxableValue }}</div>
           <div
             *ngIf="
               myForm.get('totalPrice')?.invalid &&
               myForm.get('totalPrice')?.touched
             "
-            class="error-message"
+            class="text-danger"
           >
             Trường bắt buộc nhập
           </div>
@@ -172,12 +234,12 @@
 
       <div class="my-2 col-12">
         <label class="form-label"
-          >Tiêu đề<span class="error-message">*</span></label
+          >Tiêu đề<span class="text-danger">*</span></label
         >
         <input class="form-control" formControlName="title" />
         <div
           *ngIf="myForm.get('title')?.invalid && myForm.get('title')?.touched"
-          class="error-message"
+          class="text-danger"
         >
           Trường bắt buộc nhập
         </div>
@@ -185,7 +247,7 @@
 
       <div class="my-2 col-12">
         <label class="form-label"
-          >Nội dung<span class="error-message">*</span></label
+          >Nội dung<span class="text-danger">*</span></label
         >
         <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
 
@@ -193,7 +255,7 @@
           *ngIf="
             myForm.get('content')?.invalid && myForm.get('content')?.touched
           "
-          class="error-message"
+          class="text-danger"
         >
           Trường bắt buộc nhập
         </div>
@@ -201,7 +263,7 @@
 
       <div class="row my-3 ms-2">
         <button type="submit" class="btn btn-primary col-3">Đăng tin</button>
-        <div *ngIf="errorMessage" class="error-message col-9">
+        <div *ngIf="errorMessage" class="text-danger col-9">
           {{ errorMessage }}
         </div>
       </div>

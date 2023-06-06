@@ -75,38 +75,30 @@ export const brands: ISelect[] = [
   },
 ];
 
-export const capacities: ISelect[] = [
+export const rams: ISelect[] = [
   {
-    label: '< 8 GB',
+    label: '1 GB',
     value: '< 8 GB',
   },
   {
-    label: '8 GB',
-    value: '8 GB',
+    label: '2 GB',
+    value: '2 GB',
   },
   {
-    label: '16 GB',
-    value: '16 GB',
+    label: '3 GB',
+    value: '3 GB',
   },
   {
-    label: '32 GB',
-    value: '32 GB',
+    label: '4 GB',
+    value: '4 GB',
   },
   {
-    label: '64 GB',
-    value: '64 GB',
+    label: '6 GB',
+    value: '6 GB',
   },
   {
-    label: '128 GB',
-    value: '128 GB',
-  },
-  {
-    label: '256 GB',
-    value: '256 GB',
-  },
-  {
-    label: '> 256 GB',
-    value: '> 256 GB',
+    label: '> 6 GB',
+    value: '> 6 GB',
   },
 ];
 

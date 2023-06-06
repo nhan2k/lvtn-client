@@ -1,13 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
-  Router,
-} from '@angular/router';
-import { AuthService } from '@core/services/auth.service';
-import { LoadingService } from '@core/services/loading.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +6,7 @@ import { LoadingService } from '@core/services/loading.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'chotot-client';
+  title = 'stu-tintot';
 
   constructor() {}
 }

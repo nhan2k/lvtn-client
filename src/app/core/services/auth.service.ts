@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ITokens } from '@core/interfaces/shared/auth';
-import { environment } from '@environment/environment.development';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,18 +9,19 @@ import { Observable } from 'rxjs';
 export class AuthService {
   constructor(private httpClient: HttpClient) {}
 
-  storeToken(tokens: {
-    access_token: string;
-    refresh_token: string;
-    email: string;
-  }) {
+  storeToken(tokens: ITokens) {
     sessionStorage.setItem('access_token', tokens.access_token);
     sessionStorage.setItem('refresh_token', tokens.refresh_token);
     sessionStorage.setItem('email', tokens.email);
+    sessionStorage.setItem('_id', tokens._id);
   }
 
   getToken() {
     return sessionStorage.getItem('access_token');
+  }
+
+  getId() {
+    return sessionStorage.getItem('_id');
   }
 
   getEmail() {
@@ -37,10 +37,7 @@ export class AuthService {
     password?: string;
   }): Observable<any> {
     try {
-      return this.httpClient.post(
-        `${environment.apiUrl}/user/login`,
-        credentials
-      );
+      return this.httpClient.post(`user/login`, credentials);
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -51,10 +48,16 @@ export class AuthService {
     password?: string;
   }): Observable<any> {
     try {
-      return this.httpClient.post(
-        `${environment.apiUrl}/user/register`,
-        credentials
-      );
+      return this.httpClient.post(`user/register`, credentials);
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  getProfile(): Observable<any> {
+    try {
+      const _id = this.getId();
+      return this.httpClient.get(`user/${_id}`);
     } catch (error) {
       throw new Error((error as any).message);
     }

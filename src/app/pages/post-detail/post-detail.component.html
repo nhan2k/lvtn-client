@@ -48,14 +48,17 @@
           </h5>
           <h5>Mô tả chi tiết</h5>
           <p class="card-text" [innerHTML]="post?.content"></p>
-          <div class="text-left">
-            <div class="row gy-2">
-              <div *ngFor="let key of Object.keys(objCategory)" class="col-6">
-                <span>{{ key | keyOfCategory }}</span
-                >:
-                {{ objCategory[key] }}
-              </div>
+
+          <div class="row gy-2">
+            <div *ngFor="let key of Object.keys(objCategory)" class="col-6">
+              <span>{{ key | keyOfCategory }}</span
+              >:
+              {{ objCategory[key] }}
             </div>
+          </div>
+          <div *ngIf="post?.status === 'denined'" class="mt-2">
+            <h5 class="card-text text-danger">Tin đã bị từ chối</h5>
+            <p>Lý do: {{ post?.reason }}</p>
           </div>
         </div>
       </div>
@@ -85,7 +88,11 @@
           <li class="list-group-item">
             <div class="d-flex gap-3 align-items-center">
               <i class="bi bi-info-square fs-4 px-3"></i>
-              <span>{{ post?.userId?.address }}</span>
+              <span
+                >{{ post?.userId?.address?.address }}
+                {{ post?.userId?.address?.district }}
+                {{ post?.userId?.address?.province }}</span
+              >
             </div>
           </li>
           <li

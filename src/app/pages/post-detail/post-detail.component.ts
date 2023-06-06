@@ -4,6 +4,7 @@ import { AuthService } from '@core/services/auth.service';
 import { ChatService } from '@core/services/chat.service';
 import { LoadingService } from '@core/services/loading.service';
 import { PostService } from '@core/services/post.service';
+import { message } from '@core/values/error.message';
 import { environment } from '@environment/environment.development';
 import { ToastrService } from 'ngx-toastr';
 
@@ -39,24 +40,29 @@ export class PostDetailComponent implements OnInit {
         this.postService.getOne(params['id']).subscribe({
           next: (data) => {
             this.post = data;
-
             for (const key in data) {
               if (Object.prototype.hasOwnProperty.call(data, key)) {
                 if (key.includes('PostId') && data[key]) {
                   this.objCategory = data[key];
+                  if (data[key]?.address) {
+                    (this.objCategory as any).address =
+                      data[key]?.address?.address +
+                      data[key]?.address?.district +
+                      data[key]?.address?.province;
+                  }
                 }
               }
             }
             this.loadingService.setLoading(false);
           },
           error: (error) => {
-            this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+            this.toastrService.error(message);
             this.loadingService.setLoading(false);
           },
         });
       },
       error: (error) => {
-        this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+        this.toastrService.error(message);
         this.loadingService.setLoading(false);
       },
     });

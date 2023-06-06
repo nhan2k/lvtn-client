@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@environment/environment.development';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 
@@ -15,7 +14,7 @@ export class PostService {
 
   public update(id: string | null, data: any): Observable<any> {
     try {
-      return this.httpClient.patch(`${environment.apiUrl}/post/${id}`, data);
+      return this.httpClient.patch(`/post/${id}`, data);
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -23,7 +22,7 @@ export class PostService {
 
   public count(): Observable<any> {
     try {
-      return this.httpClient.get(`${environment.apiUrl}/post/count`);
+      return this.httpClient.get(`post/count`);
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -31,7 +30,7 @@ export class PostService {
 
   public getAll(category?: string): Observable<any> {
     try {
-      return this.httpClient.get(`${environment.apiUrl}/post`, {
+      return this.httpClient.get(`post`, {
         params: {
           name: category || '',
         },
@@ -43,7 +42,7 @@ export class PostService {
 
   public getAllBySeller(status: string): Observable<any> {
     try {
-      return this.httpClient.get(`${environment.apiUrl}/post/user`, {
+      return this.httpClient.get(`post/user`, {
         params: {
           status,
         },
@@ -55,7 +54,15 @@ export class PostService {
 
   public getOne(id: string): Observable<any> {
     try {
-      return this.httpClient.get(`${environment.apiUrl}/post/${id}`);
+      return this.httpClient.get(`post/${id}`);
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  public getPostsNotify(): Observable<any> {
+    try {
+      return this.httpClient.get(`post/unseen`);
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -63,18 +70,20 @@ export class PostService {
 
   public createPost(data: any): Observable<any> {
     try {
-      return this.httpClient.post(`${environment.apiUrl}/post`, data);
+      const response = this.httpClient.post(`post`, data);
+      if (response) {
+        this.socket.emit('sendPostCreate', JSON.stringify(response));
+      }
+      return response;
     } catch (error) {
       throw new Error((error as any).message);
     }
   }
 
-  public search(keyword: string): Observable<any> {
+  public search(filterParams: any): Observable<any> {
     try {
-      return this.httpClient.get(`${environment.apiUrl}/post/search`, {
-        params: {
-          keyword,
-        },
+      return this.httpClient.get(`post/search`, {
+        params: filterParams,
       });
     } catch (error) {
       throw new Error((error as any).message);

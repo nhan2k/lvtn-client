@@ -55,7 +55,7 @@ export class keyOfCategoryPipe implements PipeTransform {
       case 'color':
         return 'Màu sắc';
       case 'numberOfKM':
-        return 'Số KM đã đi';
+        return 'Số KM đã đi (km)';
       case 'nameOfBuilding':
         return 'Tên tòa nhà';
       case 'codeOfBuilding':
@@ -126,6 +126,9 @@ export class keyOfCategoryPipe implements PipeTransform {
         return 'Dung lượng ổ cứng';
       case 'typeHardware':
         return 'Loại ổ cứng';
+      case 'statusPhone':
+        return 'Tình trạng';
+
       default:
         return value;
     }

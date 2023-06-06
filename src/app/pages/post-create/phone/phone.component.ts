@@ -15,7 +15,8 @@ import { PostService } from '@core/services/post.service';
 import { ToastrService } from 'ngx-toastr';
 import { NotifyService } from '@core/services/notify.service';
 import { LoadingService } from '@core/services/loading.service';
-import { brands, capacities, guarantees } from '@core/values/phone';
+import { brands, rams, guarantees } from '@core/values/phone';
+import { message } from '@core/values/error.message';
 
 @Component({
   selector: 'app-phone',
@@ -30,7 +31,7 @@ export class PostCreatePhoneComponent {
   fuels: ISelect[] = [];
   numOfSeats: ISelect[] = [];
   colors: ISelect[] = [];
-  capacities: ISelect[] = [];
+  rams: ISelect[] = [];
   guarantees: ISelect[] = [];
 
   images: any[] = [];
@@ -41,6 +42,14 @@ export class PostCreatePhoneComponent {
   myForm: FormGroup;
 
   formData: FormData = new FormData();
+  taxableValue: string = '';
+  formatCurrency_TaxableValue(event: any) {
+    var uy = new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(event.target.value);
+    this.taxableValue = uy;
+  }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,7 +62,7 @@ export class PostCreatePhoneComponent {
     this.myForm = this.formBuilder.group({
       categoryName: ['Điện thoại'],
       brand: ['Apple'],
-      capacity: ['< 8 GB'],
+      ram: ['< 8 GB'],
       guarantee: ['1 tháng'],
       color: ['Đen'],
       statusPhone: ['Mới'],
@@ -62,7 +71,6 @@ export class PostCreatePhoneComponent {
       totalPrice: [0, Validators.min(0)],
       title: [null, Validators.required],
       content: [null, Validators.required],
-      image: [null, Validators.required],
     });
   }
 
@@ -76,7 +84,7 @@ export class PostCreatePhoneComponent {
     this.fuels = fuels;
     this.numOfSeats = numOfSeats;
     this.colors = colors;
-    this.capacities = capacities;
+    this.rams = rams;
     this.guarantees = guarantees;
   }
 
@@ -116,22 +124,23 @@ export class PostCreatePhoneComponent {
           this.formData.append(key, element);
         }
       }
-      this.postService.createPost(this.formData).subscribe(
-        (response: any) => {
+      this.postService.createPost(this.formData).subscribe({
+        next: (response: any) => {
           this.toastrService.success('Tạo bài đăng thành công');
           this.notifyService.sendNotify(
             `Một bài đăng ${this.selectedCategory} được tạo ${JSON.stringify(
               response
             )}`
           );
-          this.loadingService.setLoading(false);
           this.router.navigate(['']);
-        },
-        (error) => {
-          this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+          this.myForm.reset();
           this.loadingService.setLoading(false);
-        }
-      );
+        },
+        error: (error) => {
+          this.toastrService.error(message);
+          this.loadingService.setLoading(false);
+        },
+      });
     } else {
       this.errorMessage = 'Form không hợp lệ vui lòng kiểm tra lại';
     }

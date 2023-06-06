@@ -1,0 +1,26 @@
+<div class="row mb-3">
+  <div class="col-6">
+    <select
+      class="form-select"
+      (change)="onProvincesChange($event)"
+      formControlName="provinceName"
+    >
+      <option selected disabled>Tỉnh / Thành phố</option>
+      <option *ngFor="let province of provinces" value="{{ province.value }}">
+        {{ province.label }}
+      </option>
+    </select>
+  </div>
+  <div class="col-6">
+    <select
+      class="form-select"
+      (change)="onDistrictsChange($event)"
+      formControlName="districtName"
+    >
+      <option selected disabled>Quận / Huyện</option>
+      <option *ngFor="let district of districts" value="{{ district.value }}">
+        {{ district.label }}
+      </option>
+    </select>
+  </div>
+</div>

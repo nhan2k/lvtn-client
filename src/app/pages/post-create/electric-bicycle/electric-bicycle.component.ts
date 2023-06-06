@@ -16,6 +16,7 @@ import {
   typeElectricBicycles,
 } from '@core/values/electric-bicycle';
 import { guarantees } from '@core/values/phone';
+import { message } from '@core/values/error.message';
 
 @Component({
   selector: 'app-electric-bicycle',
@@ -30,15 +31,12 @@ export class PostCreateElectricBicycleComponent {
   typeElectricBicycles: ISelect[] = [];
   engines: ISelect[] = [];
   guarantees: ISelect[] = [];
-
   images: any[] = [];
-
   selectedCategory: string = 'Xe điện';
   errorMessage: string | null = null;
-
   myForm: FormGroup;
-
   formData: FormData = new FormData();
+  taxableValue: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,7 +59,6 @@ export class PostCreateElectricBicycleComponent {
       totalPrice: [0, Validators.min(0)],
       title: [null, Validators.required],
       content: [null, Validators.required],
-      image: [null, Validators.required],
     });
   }
 
@@ -77,6 +74,14 @@ export class PostCreateElectricBicycleComponent {
     this.guarantees = guarantees;
 
     this.loadingService.setLoading(false);
+  }
+
+  formatCurrency_TaxableValue(event: any) {
+    var uy = new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(event?.target?.value);
+    this.taxableValue = uy;
   }
 
   onChange(target: any) {
@@ -115,22 +120,23 @@ export class PostCreateElectricBicycleComponent {
           this.formData.append(key, element);
         }
       }
-      this.postService.createPost(this.formData).subscribe(
-        (response: any) => {
+      this.postService.createPost(this.formData).subscribe({
+        next: (response: any) => {
           this.toastrService.success('Tạo bài đăng thành công');
           this.notifyService.sendNotify(
             `Một bài đăng ${this.selectedCategory} được tạo ${JSON.stringify(
               response
             )}`
           );
-          this.loadingService.setLoading(false);
+          this.myForm.reset();
           this.router.navigate(['']);
-        },
-        (error) => {
-          this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
           this.loadingService.setLoading(false);
-        }
-      );
+        },
+        error: (error) => {
+          this.toastrService.error(message);
+          this.loadingService.setLoading(false);
+        },
+      });
     } else {
       this.errorMessage = 'Form không hợp lệ vui lòng kiểm tra lại';
     }

@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { ChatService } from '@core/services/chat.service';
 import { LoadingService } from '@core/services/loading.service';
-import { Socket } from 'ngx-socket-io';
+import { PostService } from '@core/services/post.service';
+import { message } from '@core/values/error.message';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -15,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 export class HeaderComponent implements OnInit {
   isLoggined = false;
   myForm: FormGroup;
+  postsNotify: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -23,7 +25,7 @@ export class HeaderComponent implements OnInit {
     private readonly loadingService: LoadingService,
     private readonly chatService: ChatService,
     private readonly toastrService: ToastrService,
-    private readonly socket: Socket
+    private readonly postService: PostService
   ) {
     this.myForm = this.formBuilder.group({
       keyword: [null, Validators.required],
@@ -33,16 +35,17 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.getToken()) {
       this.isLoggined = true;
-    }
+      this.loadingService.setLoading(true);
 
-    const email = this.authService.getEmail();
-    if (email) {
-      this.socket.on('receivedPostApprove', (data: any) => {
-        data.join(email);
-        console.log(
-          '🚀 ~ file: header.component.ts:41 ~ HeaderComponent ~ this.socket.on ~ data:',
-          data
-        );
+      this.postService.getPostsNotify().subscribe({
+        next: (value) => {
+          this.postsNotify = value;
+          this.loadingService.setLoading(false);
+        },
+        error: (err) => {
+          this.toastrService.error(message);
+          this.loadingService.setLoading(false);
+        },
       });
     }
   }
@@ -63,18 +66,18 @@ export class HeaderComponent implements OnInit {
   onClickChat() {
     if (this.authService.getToken()) {
       this.loadingService.setLoading(true);
-      this.chatService.getAllGroup().subscribe(
-        (response: any) => {
+      this.chatService.getAllGroup().subscribe({
+        next: (response: any) => {
           this.router.navigate(['/chat'], {
             queryParams: { groupId: response?.[0]?._id },
           });
           this.loadingService.setLoading(false);
         },
-        (error) => {
-          this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+        error: (error) => {
+          this.toastrService.error(message);
           this.loadingService.setLoading(false);
-        }
-      );
+        },
+      });
     } else {
       this.router.navigate(['/login']);
     }
@@ -91,9 +94,32 @@ export class HeaderComponent implements OnInit {
           this.loadingService.setLoading(false);
         })
         .catch(() => {
-          this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+          this.toastrService.error(message);
           this.loadingService.setLoading(false);
         });
+      this.myForm.reset();
     }
+  }
+
+  onClickUpdatePost(id: string) {
+    this.loadingService.setLoading(true);
+    this.postService
+      .update(id, {
+        isSeen: true,
+      })
+      .subscribe({
+        next: (response) => {
+          this.postsNotify = this.postsNotify.filter(
+            (post) => post._id !== response._id
+          );
+          this.router.navigate(['/post-detail'], {
+            queryParams: { id },
+          });
+          this.loadingService.setLoading(false);
+        },
+        error: () => {
+          this.loadingService.setLoading(false);
+        },
+      });
   }
 }

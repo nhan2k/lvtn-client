@@ -1,0 +1,12 @@
+<div class="rating">
+  <span
+    class="star"
+    *ngFor="let star of [1, 2, 3, 4, 5]"
+    (click)="selectRating(star)"
+  >
+    <i
+      class="bi-star-fill selected"
+      [class.selected]="star <= currentRating"
+    ></i>
+  </span>
+</div>

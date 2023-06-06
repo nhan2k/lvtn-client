@@ -34,6 +34,16 @@ import { PostManageComponent } from './pages/post-manage/post-manage.component';
 import { PostCategoryComponent } from './pages/post-category/post-category.component';
 import { PostsComponent } from './shared/posts/posts.component';
 import { PostSearchComponent } from './pages/post-search/post-search.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  DEFAULT_TIMEOUT,
+  TokenInterceptor,
+} from '@core/interceptors/token/token.interceptor';
+import { HttpClientModule } from '@angular/common/http';
+import { RatingComponent } from './shared/components/rating/rating.component';
+import { FilterComponent } from './shared/components/filter/filter.component';
+import { AddressFormComponent } from './shared/components/address-form/address-form.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -63,6 +73,10 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     PostCategoryComponent,
     PostsComponent,
     PostSearchComponent,
+    ProfileComponent,
+    RatingComponent,
+    FilterComponent,
+    AddressFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,11 +86,18 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     ReactiveFormsModule,
     FormsModule,
     CKEditorModule,
-
+    HttpClientModule,
     ToastrModule.forRoot(),
     SocketIoModule.forRoot(config),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+    [{ provide: DEFAULT_TIMEOUT, useValue: 5000 }],
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

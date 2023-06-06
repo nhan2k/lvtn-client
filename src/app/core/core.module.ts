@@ -19,9 +19,8 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     keyOfCategoryPipe,
     postCurrencyPipe,
   ],
-  imports: [CommonModule, TokenModule],
+  imports: [CommonModule],
   exports: [
-    TokenModule,
     postStatusPipe,
     postIsReviewPipe,
     userStatusPipe,

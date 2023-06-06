@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '@core/services/auth.service';
 import { LoadingService } from '@core/services/loading.service';
 import { PostService } from '@core/services/post.service';
 import { message } from '@core/values/error.message';
@@ -7,26 +8,36 @@ import { environment } from '@environment/environment.development';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-post-manage',
-  templateUrl: './post-manage.component.html',
-  styleUrls: ['./post-manage.component.scss'],
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss'],
 })
-export class PostManageComponent implements OnInit {
-  status: string | null = null;
+export class ProfileComponent implements OnInit {
+  profile: any;
   posts: any[] = [];
-  idChoose: string | null = null;
-
   endpointURL: string = environment.imgUrl;
+  status: string | null = null;
 
   constructor(
-    private readonly postService: PostService,
     private readonly route: ActivatedRoute,
+    private readonly authService: AuthService,
     private readonly loadingService: LoadingService,
-    private readonly toastrService: ToastrService
+    private readonly toastrService: ToastrService,
+    private readonly postService: PostService
   ) {}
 
   ngOnInit(): void {
     this.loadingService.setLoading(true);
+    this.authService.getProfile().subscribe({
+      next: (response) => {
+        this.profile = response;
+      },
+      error: (error) => {
+        this.toastrService.error(message);
+        this.loadingService.setLoading(false);
+      },
+    });
+
     this.route.queryParams.subscribe({
       next: (params) => {
         this.status = params['status'];
@@ -46,30 +57,5 @@ export class PostManageComponent implements OnInit {
         this.loadingService.setLoading(false);
       },
     });
-  }
-
-  onClickAction(id: string) {
-    this.idChoose = id;
-  }
-
-  onClickUpdateStatus(status: string): void {
-    this.loadingService.setLoading(true);
-    this.postService
-      .update(this.idChoose, {
-        status,
-      })
-      .subscribe({
-        next: (response) => {
-          this.loadingService.setLoading(false);
-          this.posts = this.posts.filter((post) => post?._id !== response?._id);
-          this.toastrService.success(
-            `${status === 'show' ? 'Ẩn ' : 'Hiện'} tin thành công`
-          );
-        },
-        error: (error) => {
-          this.toastrService.error(message);
-          this.loadingService.setLoading(false);
-        },
-      });
   }
 }

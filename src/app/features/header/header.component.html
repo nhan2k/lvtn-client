@@ -34,6 +34,7 @@
         <a class="fs-5">
           <i class="bi bi-bell position-relative">
             <i
+              *ngIf="postsNotify.length > 0"
               class="bi bi-circle-fill text-danger position-absolute start-50"
               style="font-size: 0.7rem"
             ></i>
@@ -43,11 +44,42 @@
         >
         <ul class="dropdown-menu" style="max-height: 90vh; overflow-y: scroll">
           <li
+            *ngFor="let item of postsNotify; index as i"
             class="cursor-pointer dropdown-item border-bottom text-truncate bg-secondary bg-opacity-10"
             style="max-width: 30rem"
+            (click)="onClickUpdatePost(item?._id)"
           >
-            <p class="text-success">Bài đăng đã được duyệt</p>
-            <p>🛑IPHONE 11 PRO MAX 99% 🛑SINH VIÊN CHỈ CẦN CCCD ĐẬU</p>
+            <p
+              *ngIf="item.status === 'show'; else template"
+              class="text-success"
+            >
+              Bài đăng đã được duyệt
+
+              <span class="text-right">{{
+                item?.createdAt | date : "dd/MM h:mm a"
+              }}</span>
+            </p>
+            <ng-template #template>
+              <p
+                *ngIf="item.status === 'denined'; else template"
+                class="text-danger"
+              >
+                Bài đăng bị từ chối
+                <span class="text-right">{{
+                  item?.createdAt | date : "dd/MM h:mm a"
+                }}</span>
+              </p>
+            </ng-template>
+            <p
+              *ngIf="item.status === 'expired' && item.isSeen"
+              class="text-secondary"
+            >
+              Bài đăng đã hết hạn
+              <span class="text-right">{{
+                item?.createdAt | date : "dd/MM h:mm a"
+              }}</span>
+            </p>
+            <p>{{ item?.title }}</p>
           </li>
         </ul>
       </div>
@@ -66,6 +98,15 @@
         <i class="bi bi-person-circle"></i>
       </button>
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+        <li>
+          <button
+            class="dropdown-item"
+            [routerLink]="['/profile']"
+            [queryParams]="{ status: 'show' }"
+          >
+            Hồ sơ
+          </button>
+        </li>
         <li>
           <button class="dropdown-item" (click)="onClick()">Đăng xuất</button>
         </li>

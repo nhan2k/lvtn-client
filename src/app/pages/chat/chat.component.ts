@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { ChatService } from '@core/services/chat.service';
 import { LoadingService } from '@core/services/loading.service';
+import { message } from '@core/values/error.message';
 import { Socket } from 'ngx-socket-io';
 import { ToastrService } from 'ngx-toastr';
 
@@ -28,6 +29,14 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   myEmail: string | null = null;
 
   formData: FormData = new FormData();
+  taxableValue: string = '';
+  formatCurrency_TaxableValue(event: any) {
+    var uy = new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(event.target.value);
+    this.taxableValue = uy;
+  }
   myForm: FormGroup;
 
   groupId: string = '';
@@ -64,7 +73,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         }
       },
       error: (error) => {
-        this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+        this.toastrService.error(message);
         this.loadingService.setLoading(false);
       },
     });
@@ -89,7 +98,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.loadingService.setLoading(false);
       },
       error: (error) => {
-        this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+        this.toastrService.error(message);
         this.loadingService.setLoading(false);
       },
     });
@@ -99,7 +108,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.messages = response;
       },
       error: (error) => {
-        this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+        this.toastrService.error(message);
         this.loadingService.setLoading(false);
       },
     });
@@ -152,7 +161,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.loadingService.setLoading(false);
       })
       .catch(() => {
-        this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+        this.toastrService.error(message);
         this.loadingService.setLoading(false);
       });
   }

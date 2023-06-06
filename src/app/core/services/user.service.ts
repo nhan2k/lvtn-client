@@ -11,7 +11,7 @@ export class UserService {
 
   // public approved(id: number, data: any): Observable<any> {
   //   try {
-  //     return this.httpClient.patch(`${environment.apiUrl}/post/${id}`, data);
+  //     return this.httpClient.patch(`/post/${id}`, data);
   //   } catch (error) {
   //     throw new Error((error as any).message);
   //   }
@@ -19,7 +19,7 @@ export class UserService {
 
   public count(): Observable<any> {
     try {
-      return this.httpClient.get(`${environment.apiUrl}/user/count`);
+      return this.httpClient.get(`user/count`);
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -27,7 +27,7 @@ export class UserService {
 
   public getAll(): Observable<any> {
     try {
-      return this.httpClient.get(`${environment.apiUrl}/user`);
+      return this.httpClient.get(`user`);
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -38,7 +38,7 @@ export class UserService {
       const data = {
         status: status === 'inActive' ? 'active' : 'inActive',
       };
-      return this.httpClient.patch(`${environment.apiUrl}/user/${id}`, data);
+      return this.httpClient.patch(`user/${id}`, data);
     } catch (error) {
       throw new Error((error as any).message);
     }

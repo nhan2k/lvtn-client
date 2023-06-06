@@ -40,6 +40,7 @@ export class LoginComponent {
           this.authService.storeToken(response as ITokens);
           this.router.navigate(['/']);
           this.toastrService.success('Đăng nhập thành công');
+          this.loginForm.reset();
           this.loadingService.setLoading(false);
         }
       },

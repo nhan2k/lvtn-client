@@ -100,7 +100,9 @@
                 </div>
               </div>
             </div>
-            <p class="card-text">{{ post?.totalPrice | postCurrency }}</p>
+            <p class="card-text text-danger">
+              {{ post?.totalPrice | postCurrency }}
+            </p>
             <p class="card-text">
               <small class="text-body-secondary">{{
                 post?.createdAt | date : "dd/MM h:mm a"

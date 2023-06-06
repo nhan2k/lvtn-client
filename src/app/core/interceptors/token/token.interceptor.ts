@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable, timeout } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
+import { environment } from '@environment/environment.development';
 
 export const DEFAULT_TIMEOUT = new InjectionToken<number>('defaultTimeout');
 
@@ -23,6 +24,9 @@ export class TokenInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const timeoutValue = request.headers.get('timeout') || this.defaultTimeout;
     const timeoutValueNumeric = Number(timeoutValue);
+
+    request = request.clone({ url: `${environment.apiUrl}/${request.url}` });
+
     const token = this.authService.getToken();
     if (token) {
       request = request.clone({

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingService } from '@core/services/loading.service';
 import { PostService } from '@core/services/post.service';
+import { message } from '@core/values/error.message';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -30,13 +31,13 @@ export class PostCategoryComponent implements OnInit {
             this.loadingService.setLoading(false);
           },
           (error) => {
-            this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+            this.toastrService.error(message);
             this.loadingService.setLoading(false);
           }
         );
       },
       (error) => {
-        this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
+        this.toastrService.error(message);
         this.loadingService.setLoading(false);
       }
     );

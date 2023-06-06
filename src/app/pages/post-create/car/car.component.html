@@ -3,7 +3,7 @@
     <div class="col-4">
       <div class="my-2">
         <label for="formFile" class="form-label"
-          >Ảnh sản phẩm<span class="error-message">*</span></label
+          >Ảnh sản phẩm<span class="text-danger">*</span></label
         >
         <input
           class="form-control"
@@ -11,7 +11,6 @@
           id="formFile"
           multiple
           (change)="onFileChange($event)"
-          formControlName="image"
         />
       </div>
       <div class="row">
@@ -30,7 +29,7 @@
 
         <div
           *ngIf="myForm.get('image')?.invalid && myForm.get('image')?.touched"
-          class="error-message"
+          class="text-danger"
         >
           Vui lòng chọn hình
         </div>
@@ -80,7 +79,7 @@
         </div>
         <div class="my-2 col-12">
           <label class="form-label"
-            >Thương hiệu <span class="error-message">*</span></label
+            >Thương hiệu <span class="text-danger">*</span></label
           >
           <select formControlName="brand" class="form-select">
             <option *ngFor="let item of brands" value="{{ item.value }}">
@@ -91,7 +90,7 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Năm sản xuất<span class="error-message">*</span></label
+            >Năm sản xuất<span class="text-danger">*</span></label
           >
           <select formControlName="yearOfManufacture" class="form-select">
             <option
@@ -105,7 +104,7 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Hộp số<span class="error-message">*</span></label
+            >Hộp số<span class="text-danger">*</span></label
           >
           <select formControlName="carGearbox" class="form-select">
             <option *ngFor="let item of carGearboxs" value="{{ item.value }}">
@@ -116,7 +115,7 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Nhiên liệu<span class="error-message">*</span></label
+            >Nhiên liệu<span class="text-danger">*</span></label
           >
           <select formControlName="fuel" class="form-select">
             <option *ngFor="let item of fuels" value="{{ item.value }}">
@@ -127,7 +126,7 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Số chỗ ngồi<span class="error-message">*</span></label
+            >Số chỗ ngồi<span class="text-danger">*</span></label
           >
           <select formControlName="numberOfSeats" class="form-select">
             <option *ngFor="let item of numOfSeats" value="{{ item.value }}">
@@ -138,7 +137,7 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Màu sắc<span class="error-message">*</span></label
+            >Màu sắc<span class="text-danger">*</span></label
           >
           <select formControlName="color" class="form-select">
             <option *ngFor="let item of colors" value="{{ item.value }}">
@@ -147,14 +146,14 @@
           </select>
         </div>
         <label class="form-label"
-          >Tình trạng<span class="error-message">*</span></label
+          >Tình trạng<span class="text-danger">*</span></label
         >
         <div class="col-2 form-check ms-3 my-2">
           <input
             class="form-check-input"
             type="radio"
             checked
-            formControlName="status"
+            formControlName="statusCar"
             value="Mới"
           />
           <label class="form-check-label">Mới</label>
@@ -163,7 +162,7 @@
           <input
             class="form-check-input"
             type="radio"
-            formControlName="status"
+            formControlName="statusCar"
             value="Đã sử dụng"
           />
           <label class="form-check-label">Đã sử dụng</label>
@@ -172,7 +171,7 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Số KM đã đi<span class="error-message">*</span></label
+            >Số KM đã đi<span class="text-danger">*</span></label
           >
           <input
             type="number"
@@ -184,7 +183,7 @@
               myForm.get('numberOfKM')?.invalid &&
               myForm.get('numberOfKM')?.touched
             "
-            class="error-message"
+            class="text-danger"
           >
             Trường giá trị từ 0
           </div>
@@ -192,19 +191,21 @@
 
         <div class="my-2 col-6">
           <label class="form-label"
-            >Giá<span class="error-message">*</span></label
+            >Giá<span class="text-danger">*</span></label
           >
           <input
             class="form-control"
             type="number"
             formControlName="totalPrice"
+            (blur)="formatCurrency_TaxableValue($event)"
           />
+          <div class="mt-1">Giá (VND): {{ taxableValue }}</div>
           <div
             *ngIf="
               myForm.get('totalPrice')?.invalid &&
               myForm.get('totalPrice')?.touched
             "
-            class="error-message"
+            class="text-danger"
           >
             Trường bắt buộc nhập
           </div>
@@ -212,12 +213,12 @@
 
         <div class="my-2 col-12">
           <label class="form-label"
-            >Tiêu đề<span class="error-message">*</span></label
+            >Tiêu đề<span class="text-danger">*</span></label
           >
           <input class="form-control" formControlName="title" />
           <div
             *ngIf="myForm.get('title')?.invalid && myForm.get('title')?.touched"
-            class="error-message"
+            class="text-danger"
           >
             Trường bắt buộc nhập
           </div>
@@ -225,7 +226,7 @@
 
         <div class="my-2 col-12">
           <label class="form-label"
-            >Nội dung<span class="error-message">*</span></label
+            >Nội dung<span class="text-danger">*</span></label
           >
           <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
 
@@ -233,14 +234,14 @@
             *ngIf="
               myForm.get('content')?.invalid && myForm.get('content')?.touched
             "
-            class="error-message"
+            class="text-danger"
           >
             Trường bắt buộc nhập
           </div>
         </div>
         <div class="row my-3 ms-2">
           <button type="submit" class="btn btn-primary col-3">Đăng tin</button>
-          <div *ngIf="errorMessage" class="error-message col-9">
+          <div *ngIf="errorMessage" class="text-danger col-9">
             {{ errorMessage }}
           </div>
         </div>

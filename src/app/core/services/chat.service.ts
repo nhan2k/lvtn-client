@@ -21,7 +21,7 @@ export class ChatService {
     sellerId: string;
   }) {
     try {
-      return this.httpClient.post(`${environment.apiUrl}/chat`, {
+      return this.httpClient.post(`chat`, {
         postId,
         sellerId,
       });
@@ -33,7 +33,7 @@ export class ChatService {
   public createMessage(data: any): Observable<any> {
     try {
       return this.socket.emit('sendMessage', data);
-      // return this.httpClient.post(`${environment.apiUrl}/chat/message`, data);
+      // return this.httpClient.post(`chat/message`, data);
     } catch (error) {
       throw new Error((error as Error).message);
     }
@@ -41,7 +41,7 @@ export class ChatService {
 
   public getAllGroup() {
     try {
-      return this.httpClient.get(`${environment.apiUrl}/chat`);
+      return this.httpClient.get(`chat`);
     } catch (error) {
       throw new Error((error as Error).message);
     }
@@ -49,9 +49,7 @@ export class ChatService {
 
   public getAllMessages(groupId: string) {
     try {
-      return this.httpClient.get(
-        `${environment.apiUrl}/chat/message/${groupId}`
-      );
+      return this.httpClient.get(`chat/message/${groupId}`);
     } catch (error) {
       throw new Error((error as Error).message);
     }

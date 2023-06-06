@@ -14,6 +14,8 @@ import { NotifyService } from '@core/services/notify.service';
 import { LoadingService } from '@core/services/loading.service';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { typeOffices } from '@core/values/office';
+import { message } from '@core/values/error.message';
+import { ExternalApiService } from '@core/services/external-api.service';
 
 @Component({
   selector: 'app-office',
@@ -35,6 +37,10 @@ export class PostCreateOfficeComponent implements OnInit {
   myForm: FormGroup;
 
   formData: FormData = new FormData();
+  taxableValue: string = '';
+  provinces: ISelect[] = [];
+  province: string | null = null;
+  districts: ISelect[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,13 +48,14 @@ export class PostCreateOfficeComponent implements OnInit {
     private readonly postService: PostService,
     private readonly toastrService: ToastrService,
     private readonly notifyService: NotifyService,
-    private readonly loadingService: LoadingService
+    private readonly loadingService: LoadingService,
+    private readonly externalApiService: ExternalApiService
   ) {
     this.myForm = this.formBuilder.group({
       categoryName: ['Văn phòng'],
       type: ['Cần bán'],
       nameOfBuilding: [null, Validators.required],
-      address: [null, Validators.required],
+      addressInForm: [null, Validators.required],
       codeOfBuilding: [null, Validators.required],
       block: [null, Validators.required],
       floor: [1, [Validators.required, Validators.min(1), Validators.max(81)]],
@@ -58,10 +65,10 @@ export class PostCreateOfficeComponent implements OnInit {
       juridical: ['Đã có sổ'],
       area: [0, Validators.min(0)],
       totalPrice: [0, Validators.min(0)],
-
       title: [null, Validators.required],
       content: [null, Validators.required],
-      image: [null, Validators.required],
+      province: [null],
+      district: [null, [Validators.required]],
     });
   }
 
@@ -73,6 +80,41 @@ export class PostCreateOfficeComponent implements OnInit {
     this.interiorConditions = interiorConditions;
     this.juridicals = juridicals;
     this.typeOffices = typeOffices;
+    this.externalApiService.getProvinces().subscribe({
+      next: (response) => {
+        this.provinces = response;
+        this.loadingService.setLoading(false);
+      },
+      error: () => {
+        this.loadingService.setLoading(false);
+      },
+    });
+  }
+
+  onProvincesChange($event: Event) {
+    this.loadingService.setLoading(true);
+    this.province = this.provinces.filter(
+      (element) => element.value === ($event.target as any).value
+    )[0].label;
+    this.externalApiService
+      .getDistricts(($event.target as any).value)
+      .subscribe({
+        next: (response) => {
+          this.districts = response;
+          this.loadingService.setLoading(false);
+        },
+        error: (error) => {
+          this.loadingService.setLoading(false);
+        },
+      });
+  }
+
+  formatCurrency_TaxableValue(event: any) {
+    var uy = new Intl.NumberFormat('it-IT', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(event.target.value);
+    this.taxableValue = uy;
   }
 
   onChange(target: any) {
@@ -103,33 +145,45 @@ export class PostCreateOfficeComponent implements OnInit {
 
   onSubmit(): void {
     this.errorMessage = null;
-    if (this.myForm.valid) {
-      this.loadingService.setLoading(true);
-      for (const key in this.myForm.value) {
-        if (Object.prototype.hasOwnProperty.call(this.myForm.value, key)) {
-          const element = this.myForm.value[key];
-          this.formData.append(key, element);
-        }
-      }
-      this.postService.createPost(this.formData).subscribe(
-        (response: any) => {
-          this.toastrService.success('Tạo bài đăng thành công');
-          this.notifyService.sendNotify(
-            `Một bài đăng ${this.selectedCategory} được tạo ${JSON.stringify(
-              response
-            )}`
-          );
-          this.loadingService.setLoading(false);
-        },
-        (error) => {
-          this.toastrService.error('Đã có lỗi xảy ra vui lòng thử lại');
-          this.loadingService.setLoading(false);
-        }
-      );
-      this.loadingService.setLoading(false);
-      this.router.navigate(['/']);
-    } else {
+    if (!this.formData.get('files[]')) {
       this.errorMessage = 'Form không hợp lệ vui lòng kiểm tra lại';
+    } else {
+      if (this.myForm.valid) {
+        this.loadingService.setLoading(true);
+        for (const key in this.myForm.value) {
+          if (Object.prototype.hasOwnProperty.call(this.myForm.value, key)) {
+            const element = this.myForm.value[key];
+            this.formData.append(key, element);
+          }
+        }
+        this.formData.append(
+          'address',
+          JSON.stringify({
+            province: this.province,
+            district: this.myForm.value.district,
+            address: this.myForm.value.addressInForm,
+          })
+        );
+        this.postService.createPost(this.formData).subscribe({
+          next: (response: any) => {
+            this.toastrService.success('Tạo bài đăng thành công');
+            this.notifyService.sendNotify(
+              `Một bài đăng ${this.selectedCategory} được tạo ${JSON.stringify(
+                response
+              )}`
+            );
+            this.myForm.reset();
+            this.router.navigate(['/']);
+            this.loadingService.setLoading(false);
+          },
+          error: (error) => {
+            this.toastrService.error(message);
+            this.loadingService.setLoading(false);
+          },
+        });
+      } else {
+        this.errorMessage = 'Form không hợp lệ vui lòng kiểm tra lại';
+      }
     }
   }
   public Editor = ClassicEditor;
