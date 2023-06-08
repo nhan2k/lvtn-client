@@ -34,6 +34,7 @@ export class PostCreateMotelRoomComponent {
 
   formData: FormData = new FormData();
   taxableValue: string = '';
+  depositValue: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -94,12 +95,16 @@ export class PostCreateMotelRoomComponent {
       });
   }
 
-  formatCurrency_TaxableValue(event: any) {
+  formatCurrency_TaxableValue(event: any, name?: string) {
     var uy = new Intl.NumberFormat('it-IT', {
       style: 'currency',
       currency: 'VND',
     }).format(event.target.value);
-    this.taxableValue = uy;
+    if (name === 'depositValue') {
+      this.depositValue = uy;
+    } else {
+      this.taxableValue = uy;
+    }
   }
 
   onChange(target: any) {

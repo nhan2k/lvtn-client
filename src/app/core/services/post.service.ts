@@ -14,7 +14,7 @@ export class PostService {
 
   public update(id: string | null, data: any): Observable<any> {
     try {
-      return this.httpClient.patch(`/post/${id}`, data);
+      return this.httpClient.patch(`post/${id}`, data);
     } catch (error) {
       throw new Error((error as any).message);
     }

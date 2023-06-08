@@ -27,6 +27,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   currentUser: string = '';
   messages: any[] = [];
   myEmail: string | null = null;
+  userId: string | null;
 
   formData: FormData = new FormData();
   taxableValue: string = '';
@@ -59,6 +60,11 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     });
 
     this.token = this.authService.getToken();
+    this.userId = this.authService.getId();
+
+    this.socket.on('receivedMessage', (data: any) => {
+      this.messages = [...this.messages, data];
+    });
   }
   ngOnInit(): void {
     this.loadingService.setLoading(true);
@@ -66,8 +72,45 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
     this.route.queryParams.subscribe({
       next: (params) => {
+        this.messages = [];
         if (params['groupId']) {
           this.groupId = params['groupId'];
+
+          this.chatService.getAllGroup().subscribe({
+            next: (response: any) => {
+              if (response.length === 0) {
+                this.loadingService.setLoading(false);
+              }
+
+              this.groups = response;
+
+              const filterGroup = response.filter(
+                (res: any) => res._id === this.groupId
+              )[0];
+
+              this.currentUser =
+                filterGroup?.buyerId?.email === this.myEmail
+                  ? filterGroup?.sellerId?.fullName
+                  : filterGroup?.buyerId?.fullName;
+
+              this.socket.emit('createRoom', this.groupId);
+              this.loadingService.setLoading(false);
+            },
+            error: (error) => {
+              this.toastrService.error(message);
+              this.loadingService.setLoading(false);
+            },
+          });
+
+          this.chatService.getAllMessages(this.groupId).subscribe({
+            next: (response: any) => {
+              this.messages = response;
+            },
+            error: (error) => {
+              this.toastrService.error(message);
+              this.loadingService.setLoading(false);
+            },
+          });
         } else {
           this.loadingService.setLoading(false);
         }
@@ -78,46 +121,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       },
     });
 
-    this.chatService.getAllGroup().subscribe({
-      next: (response: any) => {
-        if (response.length === 0) {
-          this.loadingService.setLoading(false);
-        }
-
-        this.groups = response;
-
-        const filterGroup = response.filter(
-          (res: any) => res._id === this.groupId
-        )[0];
-
-        this.currentUser =
-          filterGroup?.buyerId?.email === this.myEmail
-            ? filterGroup?.sellerId?.fullName
-            : filterGroup?.buyerId?.fullName;
-
-        this.loadingService.setLoading(false);
-      },
-      error: (error) => {
-        this.toastrService.error(message);
-        this.loadingService.setLoading(false);
-      },
-    });
-
-    this.chatService.getAllMessages(this.groupId).subscribe({
-      next: (response: any) => {
-        this.messages = response;
-      },
-      error: (error) => {
-        this.toastrService.error(message);
-        this.loadingService.setLoading(false);
-      },
-    });
-
     this.scrollToBottom();
-
-    this.socket.on('receivedMessage', (data: any) => {
-      this.messages = [...this.messages, data];
-    });
   }
 
   onSubmitMessage() {

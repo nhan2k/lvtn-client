@@ -198,7 +198,13 @@
           <label class="form-label"
             >Số tiền cọc<span class="text-danger">*</span></label
           >
-          <input class="form-control" type="number" formControlName="deposit" />
+          <input
+            class="form-control"
+            type="number"
+            formControlName="deposit"
+            (keyup)="formatCurrency_TaxableValue($event, 'depositValue')"
+          />
+          <div class="mt-1">Giá (VND): {{ depositValue }}</div>
           <div
             *ngIf="
               myForm.get('deposit')?.invalid && myForm.get('deposit')?.touched
@@ -217,7 +223,7 @@
             class="form-control"
             type="number"
             formControlName="totalPrice"
-            (blur)="formatCurrency_TaxableValue($event)"
+            (keyup)="formatCurrency_TaxableValue($event)"
           />
           <div class="mt-1">Giá (VND): {{ taxableValue }}</div>
           <div
