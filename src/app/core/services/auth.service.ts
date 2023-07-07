@@ -62,4 +62,21 @@ export class AuthService {
       throw new Error((error as any).message);
     }
   }
+
+  getTargetUserProfile(userId: string): Observable<any> {
+    try {
+      const _id = userId;
+      return this.httpClient.get(`user/${_id}`);
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  updateProfile(data: any): Observable<any> {
+    try {
+      return this.httpClient.patch(`user/update/profile`, data);
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
 }

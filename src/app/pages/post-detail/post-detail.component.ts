@@ -71,16 +71,20 @@ export class PostDetailComponent implements OnInit {
   onClickChat(postId: string, sellerId: string) {
     if (this.authService.getToken()) {
       this.loadingService.setLoading(true);
-      this.chatService
-        .createGroup({ postId, sellerId })
-        ?.subscribe((response: any) => {
+      this.chatService.createGroup({ postId, sellerId })?.subscribe({
+        next: (response: any) => {
           if (response?._id) {
             this.router.navigate(['/chat'], {
               queryParams: { groupId: response?._id },
             });
             this.loadingService.setLoading(false);
           }
-        });
+        },
+        error: (err) => {
+          this.toastrService.error(message);
+          this.loadingService.setLoading(false);
+        },
+      });
     } else {
       this.router.navigate(['/login']);
     }

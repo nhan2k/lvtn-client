@@ -1,0 +1,112 @@
+<form
+  class="container"
+  style="max-width: 30rem"
+  [formGroup]="editForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập số điện thoại<span class="text-danger">*</span></label
+    >
+    <input type="text" class="form-control" formControlName="phoneNumber" />
+    <div
+      *ngIf="
+        editForm.get('phoneNumber')?.invalid &&
+        editForm.get('phoneNumber')?.touched
+      "
+      class="text-danger"
+    >
+      Số điện thoại không hợp lệ
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập email<span class="text-danger">*</span></label
+    >
+    <input type="email" class="form-control" formControlName="email" />
+    <div
+      *ngIf="editForm.get('email')?.invalid && editForm.get('email')?.touched"
+      class="text-danger"
+    >
+      Email không hợp lệ
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập họ tên<span class="text-danger">*</span></label
+    >
+    <input type="text" class="form-control" formControlName="fullName" />
+    <div
+      *ngIf="
+        editForm.get('fullName')?.invalid && editForm.get('fullName')?.touched
+      "
+      class="text-danger"
+    >
+      Họ tên tối thiếu 4 kí tự
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label"
+      >Tỉnh thành phố<span class="text-danger">*</span></label
+    >
+    <select class="form-select" (change)="onProvincesChange($event)">
+      <option selected>Chọn tỉnh thành phố</option>
+      <option *ngFor="let province of provinces" value="{{ province.value }}">
+        {{ province.label }}
+      </option>
+    </select>
+    <input
+      class="visually-hidden"
+      type="text"
+      formControlName="province"
+      [value]="province"
+    />
+    <div
+      *ngIf="
+        editForm.get('province')?.invalid && editForm.get('province')?.touched
+      "
+      class="text-danger"
+    >
+      Vui lòng chọn tỉnh thành phố
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label"
+      >Quận huyện<span class="text-danger">*</span></label
+    >
+    <select class="form-select" formControlName="district">
+      <option *ngFor="let district of districts" value="{{ district.label }}">
+        {{ district.label }}
+      </option>
+    </select>
+
+    <div
+      *ngIf="
+        editForm.get('district')?.invalid && editForm.get('district')?.touched
+      "
+      class="text-danger"
+    >
+      Vui lòng chọn tỉnh quận huyện
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label"
+      >Nhập địa chỉ<span class="text-danger">*</span></label
+    >
+    <input class="form-control" formControlName="address" />
+    <div
+      *ngIf="
+        editForm.get('address')?.invalid && editForm.get('address')?.touched
+      "
+      class="text-danger"
+    >
+      Địa chỉ tối thiếu 4 kí tự
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Xác nhận thay đổi</button>
+  <div *ngIf="errorMessage" class="text-danger">
+    {{ errorMessage }}
+  </div>
+</form>

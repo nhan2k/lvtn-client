@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-auth-layout',
@@ -13,5 +12,10 @@ export class AuthLayoutComponent implements OnInit {
     private readonly router: Router,
     private readonly authService: AuthService
   ) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const token = this.authService.getToken();
+    if (!token) {
+      this.router.navigate(['/login']);
+    }
+  }
 }

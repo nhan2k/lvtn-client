@@ -129,7 +129,9 @@ export class PostCreateElectricBicycleComponent {
             )}`
           );
           this.myForm.reset();
-          this.router.navigate(['']);
+          this.router.navigate(['/post-manage'], {
+            queryParams: { status: 'hide' },
+          });
           this.loadingService.setLoading(false);
         },
         error: (error) => {

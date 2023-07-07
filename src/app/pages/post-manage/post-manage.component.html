@@ -80,6 +80,15 @@
                 >
                   Ẩn tin
                 </button>
+                <button
+                  *ngIf="status === 'show' && !post?.isPromoted"
+                  class="btn btn-outline-success"
+                  data-bs-toggle="modal"
+                  data-bs-target="#promote"
+                  (click)="onClickAction(post?._id)"
+                >
+                  Đẩy tin
+                </button>
 
                 <div *ngIf="status === 'hide'">
                   <button
@@ -163,6 +172,88 @@
               data-bs-dismiss="modal"
             >
               Lưu thay đổi
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="promote"
+      tabindex="-1"
+      aria-labelledby="promoteLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="promoteLabel">Chọn gói đẩy tin</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group w-75 mx-auto">
+              <li
+                [ngClass]="{ active: packageChoose === 100000 }"
+                (click)="onClickChoosePackage(100000, 7)"
+                class="list-group-item py-4 my-2 cursor-pointer"
+              >
+                <h5>
+                  Gói 100000
+                  <span
+                    ><i class="bi bi-coin"></i>
+                    <span class="fs-6"> 7 ngày</span></span
+                  >
+                </h5>
+              </li>
+              <li
+                [ngClass]="{ active: packageChoose === 50000 }"
+                (click)="onClickChoosePackage(50000, 3)"
+                class="list-group-item py-4 my-2 cursor-pointer"
+              >
+                <h5>
+                  Gói 50000
+                  <span
+                    ><i class="bi bi-coin"></i>
+                    <span class="fs-6"> 3 ngày</span></span
+                  >
+                </h5>
+              </li>
+              <li
+                [ngClass]="{ active: packageChoose === 20000 }"
+                (click)="onClickChoosePackage(20000, 1)"
+                class="list-group-item py-4 my-2 cursor-pointer"
+              >
+                <h5>
+                  Gói 20000
+                  <span
+                    ><i class="bi bi-coin"></i>
+                    <span class="fs-6"> 1 ngày</span></span
+                  >
+                </h5>
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Đóng
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="onClickSubmitPromoted()"
+              data-bs-dismiss="modal"
+            >
+              Thanh toán
             </button>
           </div>
         </div>

@@ -1,0 +1,88 @@
+<div class="container">
+  <h4>Tài khoản đồng tốt</h4>
+  <ul class="nav nav-pills nav-fill">
+    <li class="nav-item">
+      <a
+        [ngClass]="{ active: name === 'balance' }"
+        class="nav-link"
+        [routerLink]="['/coin']"
+        [queryParams]="{ name: 'balance' }"
+        >Tổng số dư</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        [ngClass]="{ active: name === 'charge' }"
+        class="nav-link"
+        [routerLink]="['/coin']"
+        [queryParams]="{ name: 'charge' }"
+        >Nạp đồng tốt</a
+      >
+    </li>
+  </ul>
+
+  <div class="row mt-3">
+    <div class="col-12" *ngIf="name === 'balance'">
+      <h1 class="text-success">
+        {{ wallet?.coin }} <span><i class="bi bi-coin text-warning"></i></span>
+      </h1>
+    </div>
+
+    <div class="col-12" *ngIf="name === 'charge'">
+      <ul class="list-group w-75 mx-auto">
+        <li
+          class="list-group-item py-4 my-2 cursor-pointer"
+          [routerLink]="['/checkout']"
+          [queryParams]="{ pack: 4 }"
+        >
+          <h5>
+            Nạp 500000
+            <span
+              ><i class="bi bi-coin"></i>
+              <span class="text-secondary fs-6"> Giá: 500.000 VND</span></span
+            >
+          </h5>
+        </li>
+        <li
+          class="list-group-item py-4 my-2 cursor-pointer"
+          [routerLink]="['/checkout']"
+          [queryParams]="{ pack: 3 }"
+        >
+          <h5>
+            Nạp 100000
+            <span
+              ><i class="bi bi-coin"></i>
+              <span class="text-secondary fs-6"> Giá: 100.000 VND</span></span
+            >
+          </h5>
+        </li>
+        <li
+          class="list-group-item py-4 my-2 cursor-pointer"
+          [routerLink]="['/checkout']"
+          [queryParams]="{ pack: 2 }"
+        >
+          <h5>
+            Nạp 50000
+            <span
+              ><i class="bi bi-coin"></i>
+              <span class="text-secondary fs-6"> Giá: 50.000 VND</span></span
+            >
+          </h5>
+        </li>
+        <li
+          class="list-group-item py-4 my-2 cursor-pointer"
+          [routerLink]="['/checkout']"
+          [queryParams]="{ pack: 1 }"
+        >
+          <h5>
+            Nạp 20000
+            <span
+              ><i class="bi bi-coin"></i>
+              <span class="text-secondary fs-6"> Giá: 20.000 VND</span></span
+            >
+          </h5>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

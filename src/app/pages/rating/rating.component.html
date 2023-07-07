@@ -1,0 +1,67 @@
+<div class="container">
+  <h3>Đánh giá về {{ userTarget?.fullName }}</h3>
+  <div class="row mb-5" *ngIf="postId">
+    <div class="col-12">
+      <div class="list-group">
+        <form>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Bài đăng</label>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Đánh giá </label>
+            <div>
+              <ngb-rating [(rate)]="currentRate" [max]="5">
+                <ng-template let-fill="fill" let-index="index">
+                  <i
+                    class="rating bi-star{{ fill === 100 ? '-fill' : '' }}"
+                    [class.filled]="fill === 100"
+                  ></i>
+                </ng-template>
+              </ngb-rating>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label"
+              >Bình luận</label
+            >
+            <textarea
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+              (keyup)="onChangeComment($event.target)"
+              required
+            ></textarea>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="onSubmitComment()"
+          >
+            Đăng
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="list-group">
+        <div
+          class="list-group-item list-group-item-action my-2"
+          aria-current="true"
+          *ngFor="let rating of ratings"
+        >
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ rating?.postId?.title }}</h5>
+            <small>{{ rating?.createdAt | date : "dd/MM/yyyy h:mm a" }}</small>
+          </div>
+          <p class="mb-1">{{ rating?.userId?.fullName }}</p>
+          <p class="mb-1">
+            {{ rating?.rate }} <i class="bi bi-star-fill text-warning"></i>
+          </p>
+          <small>{{ rating?.comment }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

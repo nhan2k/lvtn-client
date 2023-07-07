@@ -167,7 +167,9 @@ export class PostCreateGroundComponent {
             );
             this.myForm.reset();
             this.loadingService.setLoading(false);
-            this.router.navigate(['']);
+            this.router.navigate(['/post-manage'], {
+              queryParams: { status: 'hide' },
+            });
           },
           error: (error) => {
             this.toastrService.error(message);

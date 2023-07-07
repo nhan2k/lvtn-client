@@ -20,13 +20,15 @@
       <div>
         <div class="card-body my-2">
           <p class="card-text fs-5 text-truncate">
-            {{ post.title }}
+            {{ post?.title }}
           </p>
           <p class="card-text fs-5 text-danger">
-            {{ post.totalPrice | postCurrency }}
+            {{ post?.totalPrice | postCurrency }}
           </p>
           <p class="card-text fs-5 text-secondary">
-            {{ post.createdAt | date : "dd/MM h:mm a" }}
+            {{
+              post?.promotedStartDate || post?.createdAt | date : "dd/MM h:mm a"
+            }}
           </p>
         </div>
       </div>

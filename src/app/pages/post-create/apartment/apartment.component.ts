@@ -181,7 +181,9 @@ export class PostCreateApartmentComponent implements OnInit {
                 response
               )}`
             );
-            this.router.navigate(['']);
+             this.router.navigate(['/post-manage'], {
+            queryParams: { status: 'hide' },
+          });
             this.loadingService.setLoading(false);
           },
           error: (error) => {

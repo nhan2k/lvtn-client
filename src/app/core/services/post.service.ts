@@ -38,11 +38,20 @@ export class PostService {
     }
   }
 
-  public getAllBySeller(status: string): Observable<any> {
+  public getAllBySeller(
+    status = 'hide',
+    userId: string | null,
+    isSelled = false
+  ): Observable<any> {
+    if (!userId) {
+      throw new Error('Id invalid');
+    }
     try {
       return this.httpClient.get(`post/user`, {
         params: {
           status,
+          isSelled,
+          userId,
         },
       });
     } catch (error) {
@@ -83,6 +92,20 @@ export class PostService {
       return this.httpClient.get(`post/search`, {
         params: filterParams,
       });
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  public promote(
+    postId: string,
+    data: {
+      coin: number;
+      promotedEndDate: number;
+    }
+  ): Observable<any> {
+    try {
+      return this.httpClient.patch(`post/promote/${postId}`, data);
     } catch (error) {
       throw new Error((error as any).message);
     }

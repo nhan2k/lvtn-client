@@ -44,10 +44,11 @@ export class FilterComponent implements OnInit {
     this.province = this.provinces.filter(
       (element) => element.value === ($event.target as any).value
     )[0].label;
+    const { districts, ...rest } = this.currentParams;
     this.router
       .navigate([`${this.currentLink}`], {
         queryParams: {
-          ...this.currentParams,
+          ...rest,
           province: this.province,
         },
       })

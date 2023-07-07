@@ -70,6 +70,13 @@
             <div class="d-flex gap-3 align-items-center">
               <i class="bi bi-person-circle border rounded px-3 py-2"></i>
               <span>{{ post?.userId?.fullName }}</span>
+              <button
+                class="btn btn-info"
+                [routerLink]="['/profile']"
+                [queryParams]="{ status: 'show', userId: post?.userId?._id }"
+              >
+                Xem
+              </button>
             </div>
           </li>
           <li class="list-group-item">

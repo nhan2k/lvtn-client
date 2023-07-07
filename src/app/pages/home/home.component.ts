@@ -21,9 +21,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadingService.setLoading(true);
-    this.postService.getAll({}).subscribe((response) => {
-      this.postList = response;
-      this.loadingService.setLoading(false);
+    this.postService.getAll({}).subscribe({
+      next: (response) => {
+        this.postList = response;
+        this.loadingService.setLoading(false);
+      },
+      error: (err) => {},
     });
   }
 }

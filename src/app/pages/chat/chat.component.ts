@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { ChatService } from '@core/services/chat.service';
 import { LoadingService } from '@core/services/loading.service';
+import { PostService } from '@core/services/post.service';
 import { message } from '@core/values/error.message';
 import { Socket } from 'ngx-socket-io';
 import { ToastrService } from 'ngx-toastr';
@@ -43,6 +44,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   groupId: string = '';
 
   token: string | null;
+  isSeller: boolean = false;
 
   constructor(
     private readonly chatService: ChatService,
@@ -52,7 +54,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     private readonly route: ActivatedRoute,
     private readonly toastrService: ToastrService,
     private readonly router: Router,
-    private readonly socket: Socket
+    private readonly socket: Socket,
+    private readonly postService: PostService
   ) {
     this.myForm = this.formBuilder.group({
       text: [null, Validators.required],
@@ -153,9 +156,15 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  onChangeUser(groupId: string, userName: string) {
+  onChangeUser(
+    groupId: string,
+    userName: string,
+    sellerName: string,
+    isSelled: boolean
+  ) {
     this.loadingService.setLoading(true);
     this.currentUser = userName;
+    this.isSeller = sellerName !== userName && !isSelled;
 
     this.router
       .navigate(['/chat'], {
@@ -168,5 +177,50 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         this.toastrService.error(message);
         this.loadingService.setLoading(false);
       });
+  }
+
+  onClickSelled() {
+    this.loadingService.setLoading(true);
+    const postId = this.groups.filter(
+      (group) => group?._id === this.groupId
+    )?.[0]?.postId?._id;
+
+    this.postService
+      .update(postId, {
+        status: 'hide',
+        isSelled: true,
+      })
+      .subscribe({
+        next: (response) => {
+          this.loadingService.setLoading(false);
+          this.router.navigate(['/profile'], {
+            queryParams: { isSelled: true },
+          });
+        },
+        error: (error) => {
+          this.toastrService.error(message);
+          this.loadingService.setLoading(false);
+        },
+      });
+  }
+
+  onClickRating() {
+    const group = this.groups.filter(
+      (group) => group?._id === this.groupId
+    )?.[0];
+    const userTargetId =
+      group?.buyerId?.email === this.myEmail
+        ? group?.sellerId?._id
+        : group?.buyerId?._id;
+
+    const postId = group?.postId?._id;
+
+    this.router.navigate(['/rating'], {
+      queryParams: {
+        userTargetId,
+        postId,
+        userId: this.userId,
+      },
+    });
   }
 }

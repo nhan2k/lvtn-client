@@ -129,7 +129,9 @@ export class PostCreateLaptopComponent {
               response
             )}`
           );
-          this.router.navigate(['']);
+          this.router.navigate(['/post-manage'], {
+            queryParams: { status: 'hide' },
+          });
           this.myForm.reset();
           this.loadingService.setLoading(false);
         },

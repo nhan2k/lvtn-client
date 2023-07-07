@@ -11,16 +11,25 @@
           </li>
           <li class="list-group-item">
             <div class="d-flex gap-3 align-items-center">
-              <span class="fs-5 fw-bold ms-2">3.0</span>
+              <span class="fs-5 fw-bold ms-2">{{ rating?.rateAvg }}</span>
               <div class="rating">
                 <span
                   class="star"
                   *ngFor="let star of [1, 2, 3, 4, 5]; index as i"
                 >
-                  <i class="bi-star-fill" [ngClass]="{ active: i < 4 }"></i>
+                  <i
+                    class="bi-star-fill"
+                    *ngIf="rating?.rateAvg"
+                    [ngClass]="{ active: i < rating?.rateAvg }"
+                  ></i>
                 </span>
               </div>
-              <span class="fs-5 text-primary">(3 Đánh giá)</span>
+              <span
+                class="fs-5 text-primary cursor-pointer"
+                [routerLink]="['/rating']"
+                [queryParams]="{ userId: userId }"
+                >({{ rating?.count ?? "Chưa có" }} đánh giá)</span
+              >
             </div>
           </li>
           <li class="list-group-item">
@@ -37,12 +46,58 @@
           </li>
           <li class="list-group-item">
             <div class="d-flex gap-3 align-items-center">
+              <i class="bi bi-envelope fs-4 px-3"></i>
+              <span>{{ profile?.email }} </span>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="d-flex gap-3 align-items-center">
               <i class="bi bi-info-square fs-4 px-3"></i>
               <span
                 >{{ profile?.address?.address }}
                 {{ profile?.address?.district }}
                 {{ profile?.address?.province }}</span
               >
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="d-flex gap-3 align-items-center">
+              <i class="bi bi-phone fs-4 px-3"></i>
+              <span
+                >{{
+                  profile?.phoneNumberVerified ? "Đã xác thực" : "Chưa xác thực"
+                }}
+              </span>
+              <a
+                *ngIf="!profile?.phoneNumberVerified"
+                [routerLink]="['/verify-phone']"
+                [queryParams]="{ id: profile?._id }"
+                class="btn btn-success"
+                type="button"
+                data-bs-toggle="tooltip"
+                data-bs-title="Vui lòng xác thực số điện thoại để được đăng tin rao bán."
+              >
+                Xác thực
+              </a>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="d-flex gap-3 align-items-center">
+              <i class="bi bi-envelope fs-4 px-3"></i>
+              <span
+                >{{ profile?.emailVerified ? "Đã xác thực" : "Chưa xác thực" }}
+              </span>
+              <button
+                *ngIf="!profile?.emailVerified"
+                (click)="verifyEmail(profile?._id)"
+                class="btn btn-success"
+                type="button"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                title="Vui lòng xác thực số email để được nhận thông báo từ hệ thống của chúng tôi."
+              >
+                Xác thực
+              </button>
             </div>
           </li>
         </ul>
@@ -55,14 +110,14 @@
           class="nav-link"
           aria-current="page"
           [routerLink]="['/profile']"
-          [queryParams]="{ status: 'show' }"
+          [queryParams]="{ status: 'show', userId }"
           >Đang hiển thị</a
         >
         <a
-          [ngClass]="{ active: status === 'sold' }"
+          [ngClass]="{ active: isSelled }"
           class="nav-link"
           [routerLink]="['/profile']"
-          [queryParams]="{ status: 'sold' }"
+          [queryParams]="{ isSelled: true, userId }"
           >Đã bán</a
         >
       </nav>

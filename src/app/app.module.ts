@@ -41,9 +41,13 @@ import {
   TokenInterceptor,
 } from '@core/interceptors/token/token.interceptor';
 import { HttpClientModule } from '@angular/common/http';
-import { RatingComponent } from './shared/components/rating/rating.component';
 import { FilterComponent } from './shared/components/filter/filter.component';
 import { AddressFormComponent } from './shared/components/address-form/address-form.component';
+import { CoinComponent } from './pages/coin/coin.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { VerifyEmailComponent } from './pages/verify-email/verify-email.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SettingComponent } from './pages/setting/setting.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -74,9 +78,12 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     PostsComponent,
     PostSearchComponent,
     ProfileComponent,
-    RatingComponent,
     FilterComponent,
     AddressFormComponent,
+    CoinComponent,
+    CheckoutComponent,
+    VerifyEmailComponent,
+    SettingComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,6 +96,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     HttpClientModule,
     ToastrModule.forRoot(),
     SocketIoModule.forRoot(config),
+    NgbModule,
   ],
   providers: [
     {

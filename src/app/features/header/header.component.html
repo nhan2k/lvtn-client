@@ -84,13 +84,11 @@
         </ul>
       </div>
     </div>
-    <div
-      class="btn-group border border-3 border-black rounded"
-      *ngIf="this.authService.getToken(); else template"
-    >
+    <div class="btn-group" *ngIf="this.authService.getToken(); else template">
+      <h6 class="m-auto pe-2">{{ profile?.fullName }}</h6>
       <button
         type="button"
-        class="btn btn-black"
+        class="btn btn-black border border-3 border-black rounded"
         data-bs-toggle="dropdown"
         data-bs-display="static"
         aria-expanded="false"
@@ -102,9 +100,23 @@
           <button
             class="dropdown-item"
             [routerLink]="['/profile']"
-            [queryParams]="{ status: 'show' }"
+            [queryParams]="{ status: 'show', userId: userId }"
           >
             Hồ sơ
+          </button>
+        </li>
+        <li>
+          <button
+            class="dropdown-item"
+            [routerLink]="['/coin']"
+            [queryParams]="{ name: 'balance' }"
+          >
+            Đồng tốt
+          </button>
+        </li>
+        <li>
+          <button class="dropdown-item" [routerLink]="['/setting']">
+            Cập nhật thông tin
           </button>
         </li>
         <li>

@@ -17,6 +17,8 @@ export class HeaderComponent implements OnInit {
   isLoggined = false;
   myForm: FormGroup;
   postsNotify: any[] = [];
+  userId: string | null = null;
+  profile: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,6 +50,16 @@ export class HeaderComponent implements OnInit {
         },
       });
     }
+    this.userId = this.authService.getId();
+    this.authService.getProfile().subscribe({
+      next: (response) => {
+        this.profile = response;
+      },
+      error: (err) => {
+        this.toastrService.error(message);
+        this.loadingService.setLoading(false);
+      },
+    });
   }
 
   onClick() {

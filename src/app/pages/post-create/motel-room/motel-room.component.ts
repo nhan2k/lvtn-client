@@ -171,7 +171,9 @@ export class PostCreateMotelRoomComponent {
           },
         });
         this.loadingService.setLoading(false);
-        this.router.navigate(['']);
+        this.router.navigate(['/post-manage'], {
+          queryParams: { status: 'hide' },
+        });
       } else {
         this.errorMessage = 'Form không hợp lệ vui lòng kiểm tra lại';
       }

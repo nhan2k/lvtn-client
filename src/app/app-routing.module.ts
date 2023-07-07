@@ -8,6 +8,11 @@ import { PostManageComponent } from './pages/post-manage/post-manage.component';
 import { PostCategoryComponent } from './pages/post-category/post-category.component';
 import { PostSearchComponent } from './pages/post-search/post-search.component';
 import { authRoutes, postCreateRoutes } from '@core/values/routes';
+import { CoinComponent } from './pages/coin/coin.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { VerifyEmailComponent } from './pages/verify-email/verify-email.component';
+import { RatingComponent } from './pages/rating/rating.component';
+import { SettingComponent } from './pages/setting/setting.component';
 
 const routes: Routes = [
   {
@@ -40,7 +45,27 @@ const routes: Routes = [
         path: 'posts',
         component: PostSearchComponent,
       },
+      {
+        path: 'coin',
+        component: CoinComponent,
+      },
+      {
+        path: 'checkout',
+        component: CheckoutComponent,
+      },
+      {
+        path: 'rating',
+        component: RatingComponent,
+      },
+      {
+        path: 'setting',
+        component: SettingComponent,
+      },
     ],
+  },
+  {
+    path: 'verify-email',
+    component: VerifyEmailComponent,
   },
 ];
 
