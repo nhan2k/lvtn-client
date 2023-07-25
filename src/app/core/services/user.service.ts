@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
+import { handleError } from './handleError';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class UserService {
 
   public count(): Observable<any> {
     try {
-      return this.httpClient.get(`user/count`);
+      return this.httpClient.get(`user/count`).pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -18,7 +19,7 @@ export class UserService {
 
   public getAll(): Observable<any> {
     try {
-      return this.httpClient.get(`user`);
+      return this.httpClient.get(`user`).pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -29,7 +30,9 @@ export class UserService {
       const data = {
         status: status === 'inActive' ? 'active' : 'inActive',
       };
-      return this.httpClient.patch(`user/${id}`, data);
+      return this.httpClient
+        .patch(`user/${id}`, data)
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -37,7 +40,9 @@ export class UserService {
 
   public getWallet(): Observable<any> {
     try {
-      return this.httpClient.get('user/wallet/byUser');
+      return this.httpClient
+        .get('user/wallet/byUser')
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -45,7 +50,9 @@ export class UserService {
 
   public createPayment(data: { coin: number }): Observable<any> {
     try {
-      return this.httpClient.post('user/payment', data);
+      return this.httpClient
+        .post('user/payment', data)
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -53,7 +60,9 @@ export class UserService {
 
   public verifySendEmail(): Observable<any> {
     try {
-      return this.httpClient.get('user/verifySendEmail');
+      return this.httpClient
+        .get('user/verifySendEmail')
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -61,7 +70,32 @@ export class UserService {
 
   public verifyEmail(userId: string): Observable<any> {
     try {
-      return this.httpClient.get(`user/verifyEmail/${userId}`);
+      return this.httpClient
+        .get(`user/verifyEmail/${userId}`)
+        .pipe(catchError(handleError));
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  public verifySendPhoneNumber(): Observable<any> {
+    try {
+      return this.httpClient
+        .get('user/verifySendPhone')
+        .pipe(catchError(handleError));
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  public verifyPhoneNumber(userId?: string, otp?: string): Observable<any> {
+    if (!userId || !otp) {
+      throw new Error('Invalid');
+    }
+    try {
+      return this.httpClient
+        .post(`user/verifyPhone/${userId}`, { otp })
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -75,13 +109,15 @@ export class UserService {
     postId?: string
   ): Observable<any> {
     try {
-      return this.httpClient.post('rating', {
-        userId,
-        userTargetId,
-        postId,
-        rate,
-        comment,
-      });
+      return this.httpClient
+        .post('rating', {
+          userId,
+          userTargetId,
+          postId,
+          rate,
+          comment,
+        })
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -95,9 +131,11 @@ export class UserService {
       const params = {
         userId,
       };
-      return this.httpClient.get('rating', {
-        params,
-      });
+      return this.httpClient
+        .get('rating', {
+          params,
+        })
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -111,9 +149,24 @@ export class UserService {
       const params = {
         userId,
       };
-      return this.httpClient.get('rating/avg', {
-        params,
-      });
+      return this.httpClient
+        .get('rating/avg', {
+          params,
+        })
+        .pipe(catchError(handleError));
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  public createOrUpdateSuggest(
+    data: { categoryName: string },
+    isSuggested: boolean
+  ): Observable<any> {
+    try {
+      return this.httpClient
+        .post('user/suggest', data)
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }

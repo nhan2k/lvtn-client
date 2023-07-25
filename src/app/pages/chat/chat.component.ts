@@ -58,7 +58,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     private readonly postService: PostService
   ) {
     this.myForm = this.formBuilder.group({
-      text: [null, Validators.required],
+      text: [null, [Validators.required, Validators.max(250)]],
       file: [null],
     });
 
@@ -100,7 +100,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
               this.loadingService.setLoading(false);
             },
             error: (error) => {
-              this.toastrService.error(message);
+              this.toastrService.error(error || message);
               this.loadingService.setLoading(false);
             },
           });
@@ -110,7 +110,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
               this.messages = response;
             },
             error: (error) => {
-              this.toastrService.error(message);
+              this.toastrService.error(error || message);
               this.loadingService.setLoading(false);
             },
           });
@@ -119,7 +119,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         }
       },
       error: (error) => {
-        this.toastrService.error(message);
+        this.toastrService.error(error || message);
         this.loadingService.setLoading(false);
       },
     });
@@ -198,7 +198,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
           });
         },
         error: (error) => {
-          this.toastrService.error(message);
+          this.toastrService.error(error || message);
           this.loadingService.setLoading(false);
         },
       });

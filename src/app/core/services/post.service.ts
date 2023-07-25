@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
-import { Observable } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
+import { handleError } from './handleError';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,9 @@ export class PostService {
 
   public update(id: string | null, data: any): Observable<any> {
     try {
-      return this.httpClient.patch(`post/${id}`, data);
+      return this.httpClient
+        .patch(`post/${id}`, data)
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -22,7 +25,7 @@ export class PostService {
 
   public count(): Observable<any> {
     try {
-      return this.httpClient.get(`post/count`);
+      return this.httpClient.get(`post/count`).pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -30,9 +33,11 @@ export class PostService {
 
   public getAll(filterParams: any): Observable<any> {
     try {
-      return this.httpClient.get(`post`, {
-        params: filterParams,
-      });
+      return this.httpClient
+        .get(`post`, {
+          params: filterParams,
+        })
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -47,13 +52,15 @@ export class PostService {
       throw new Error('Id invalid');
     }
     try {
-      return this.httpClient.get(`post/user`, {
-        params: {
-          status,
-          isSelled,
-          userId,
-        },
-      });
+      return this.httpClient
+        .get(`post/user`, {
+          params: {
+            status,
+            isSelled,
+            userId,
+          },
+        })
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -61,7 +68,7 @@ export class PostService {
 
   public getOne(id: string): Observable<any> {
     try {
-      return this.httpClient.get(`post/${id}`);
+      return this.httpClient.get(`post/${id}`).pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -69,7 +76,7 @@ export class PostService {
 
   public getPostsNotify(): Observable<any> {
     try {
-      return this.httpClient.get(`post/unseen`);
+      return this.httpClient.get(`post/unseen`).pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -77,21 +84,29 @@ export class PostService {
 
   public createPost(data: any): Observable<any> {
     try {
-      const response = this.httpClient.post(`post`, data);
+      const response = this.httpClient
+        .post(`post`, data)
+        .pipe(catchError(handleError));
       if (response) {
         this.socket.emit('sendPostCreate', JSON.stringify(response));
       }
       return response;
     } catch (error) {
+      console.log(
+        '🚀 ~ file: post.service.ts:86 ~ PostService ~ createPost ~ error:',
+        error
+      );
       throw new Error((error as any).message);
     }
   }
 
   public search(filterParams: any): Observable<any> {
     try {
-      return this.httpClient.get(`post/search`, {
-        params: filterParams,
-      });
+      return this.httpClient
+        .get(`post/search`, {
+          params: filterParams,
+        })
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }
@@ -105,7 +120,44 @@ export class PostService {
     }
   ): Observable<any> {
     try {
-      return this.httpClient.patch(`post/promote/${postId}`, data);
+      return this.httpClient
+        .patch(`post/promote/${postId}`, data)
+        .pipe(catchError(handleError));
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  public getALlSuggests(): Observable<any> {
+    try {
+      return this.httpClient.get(`post/suggest`).pipe(catchError(handleError));
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  public countSaw(postId: string): Observable<any> {
+    try {
+      return this.httpClient
+        .patch(`post/countSaw`, {
+          postId,
+        })
+        .pipe(catchError(handleError));
+    } catch (error) {
+      throw new Error((error as any).message);
+    }
+  }
+
+  public getAllHotPost(filter: {
+    pageNumber: number;
+    pageSize: number;
+  }): Observable<any> {
+    try {
+      return this.httpClient
+        .get(`post/hotPost`, {
+          params: filter,
+        })
+        .pipe(catchError(handleError));
     } catch (error) {
       throw new Error((error as any).message);
     }

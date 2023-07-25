@@ -11,7 +11,9 @@ import { environment } from '@environment/environment.development';
 })
 export class HomeComponent implements OnInit {
   postList: any[] = [];
+  hotPostList: any[] = [];
   endpointURL: string = environment.imgUrl;
+  totalItems: number = 10;
 
   constructor(
     private readonly router: Router,
@@ -26,7 +28,21 @@ export class HomeComponent implements OnInit {
         this.postList = response;
         this.loadingService.setLoading(false);
       },
-      error: (err) => {},
+      error: (error) => {},
     });
+
+    this.postService
+      .getAllHotPost({
+        pageNumber: 1,
+        pageSize: 10,
+      })
+      .subscribe({
+        next: (response) => {
+          this.hotPostList = response.data;
+          this.totalItems = response.totalCount;
+          this.loadingService.setLoading(false);
+        },
+        error: (error) => {},
+      });
   }
 }

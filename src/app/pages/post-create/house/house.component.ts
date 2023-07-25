@@ -64,10 +64,10 @@ export class PostCreateHouseComponent {
   ) {
     this.myForm = this.formBuilder.group({
       categoryName: ['Nhà ở'],
-      type: ['Cần bán', Validators.required],
-      addressInForm: [null, Validators.required],
-      codeHouse: [null, Validators.required],
-      block: [null, Validators.required],
+      type: ['Cần bán', [Validators.required, Validators.max(250)]],
+      addressInForm: [null, [Validators.required, Validators.max(250)]],
+      codeHouse: [null, [Validators.required, Validators.max(250)]],
+      block: [null, [Validators.required, Validators.max(250)]],
       typeHouse: ['Nhà mặt phố, mặt tiền'],
       numberOfBedroom: ['1'],
       numberOfBathroom: ['1'],
@@ -78,10 +78,10 @@ export class PostCreateHouseComponent {
       height: [0, Validators.min(0)],
       width: [0, Validators.min(0)],
       totalPrice: [0, Validators.min(0)],
-      title: [null, Validators.required],
-      content: [null, Validators.required],
+      title: [null, [Validators.required, Validators.max(250)]],
+      content: [null, [Validators.required, Validators.max(250)]],
       province: [null],
-      district: [null, [Validators.required]],
+      district: [null, [Validators.required, Validators.max(250)]],
     });
   }
 
@@ -196,7 +196,7 @@ export class PostCreateHouseComponent {
             this.loadingService.setLoading(false);
           },
           error: (error) => {
-            this.toastrService.error(message);
+            this.toastrService.error(error || message);
             this.loadingService.setLoading(false);
           },
         });

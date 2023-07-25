@@ -68,8 +68,9 @@
                   profile?.phoneNumberVerified ? "Đã xác thực" : "Chưa xác thực"
                 }}
               </span>
-              <a
+              <button
                 *ngIf="!profile?.phoneNumberVerified"
+                (click)="verifyPhoneNumber(profile?._id)"
                 [routerLink]="['/verify-phone']"
                 [queryParams]="{ id: profile?._id }"
                 class="btn btn-success"
@@ -78,7 +79,7 @@
                 data-bs-title="Vui lòng xác thực số điện thoại để được đăng tin rao bán."
               >
                 Xác thực
-              </a>
+              </button>
             </div>
           </li>
           <li class="list-group-item">

@@ -46,6 +46,9 @@
 <hr />
 
 <div class="row">
+  <div class="col-12" *ngIf="posts.length === 0">
+    <h1>Không tìm thấy</h1>
+  </div>
   <div class="col-12" *ngFor="let post of posts">
     <div class="card mb-3">
       <div class="row g-0">
@@ -62,7 +65,7 @@
         <div class="col-md-8">
           <div class="card-body">
             <div class="d-flex justify-content-between">
-              <h5 class="card-title">{{ post?.title }}</h5>
+              <h5 class="card-title text-truncate w-50">{{ post?.title }}</h5>
               <div class="d-flex gap-2">
                 <a
                   [routerLink]="['/post-detail']"
@@ -116,6 +119,12 @@
               <small class="text-body-secondary">{{
                 post?.createdAt | date : "dd/MM h:mm a"
               }}</small>
+            </p>
+            <p class="card-text" *ngIf="post?.isPromoted">
+              <small class="text-body-secondary">
+                Tin đang được đẩy ngày hết hạn
+                {{ post?.promotedEndDate | date : "dd/MM h:mm a" }}</small
+              >
             </p>
           </div>
         </div>

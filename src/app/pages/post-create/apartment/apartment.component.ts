@@ -57,10 +57,10 @@ export class PostCreateApartmentComponent implements OnInit {
     this.myForm = this.formBuilder.group({
       categoryName: ['Chung cư'],
       type: ['Cần bán'],
-      nameOfBuilding: [null, Validators.required],
-      addressInForm: [null, Validators.required],
-      codeOfBuilding: [null, Validators.required],
-      block: [null, Validators.required],
+      nameOfBuilding: [null, [Validators.required, Validators.max(250)]],
+      addressInForm: [null, [Validators.required, Validators.max(250)]],
+      codeOfBuilding: [null, [Validators.required, Validators.max(250)]],
+      block: [null, [Validators.required, Validators.max(250)]],
       floor: [1, [Validators.required, Validators.min(1), Validators.max(81)]],
       typeOfBuilding: ['Chung cư'],
       numberOfBedroom: [0, [Validators.required, Validators.min(0)]],
@@ -71,10 +71,10 @@ export class PostCreateApartmentComponent implements OnInit {
       juridical: ['Đã có sổ'],
       area: [0, Validators.min(0)],
       totalPrice: [0, Validators.min(0)],
-      title: [null, Validators.required],
-      content: [null, Validators.required],
+      title: [null, [Validators.required, Validators.max(250)]],
+      content: [null, [Validators.required, Validators.max(250)]],
       province: [null],
-      district: [null, [Validators.required]],
+      district: [null, [Validators.required, Validators.max(250)]],
     });
   }
 
@@ -181,13 +181,13 @@ export class PostCreateApartmentComponent implements OnInit {
                 response
               )}`
             );
-             this.router.navigate(['/post-manage'], {
-            queryParams: { status: 'hide' },
-          });
+            this.router.navigate(['/post-manage'], {
+              queryParams: { status: 'hide' },
+            });
             this.loadingService.setLoading(false);
           },
           error: (error) => {
-            this.toastrService.error(message);
+            this.toastrService.error(error || message);
             this.loadingService.setLoading(false);
           },
         });

@@ -280,7 +280,7 @@
             class="form-control"
             type="number"
             formControlName="totalPrice"
-            (blur)="formatCurrency_TaxableValue($event)"
+            (keyup)="formatCurrency_TaxableValue($event)"
           />
           <div class="mt-1">Giá (VND): {{ taxableValue }}</div>
           <div

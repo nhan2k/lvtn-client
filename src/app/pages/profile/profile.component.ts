@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
               this.loadingService.setLoading(false);
             },
             error: (error) => {
-              this.toastrService.error(message);
+              this.toastrService.error(error || message);
               this.loadingService.setLoading(false);
             },
           });
@@ -64,7 +64,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
             this.profile = response;
           },
           error: (error) => {
-            this.toastrService.error(message);
+            this.toastrService.error(error || message);
             this.loadingService.setLoading(false);
           },
         });
@@ -74,13 +74,13 @@ export class ProfileComponent implements OnInit, AfterViewInit {
             this.rating = response;
           },
           error: (error) => {
-            this.toastrService.error(message);
+            this.toastrService.error(error || message);
             this.loadingService.setLoading(false);
           },
         });
       },
       error: (error) => {
-        this.toastrService.error(message);
+        this.toastrService.error(error || message);
         this.loadingService.setLoading(false);
       },
     });
@@ -107,7 +107,29 @@ export class ProfileComponent implements OnInit, AfterViewInit {
           this.loadingService.setLoading(false);
         },
         error: (error) => {
-          this.toastrService.error(message);
+          this.toastrService.error(error || message);
+          this.loadingService.setLoading(false);
+        },
+      });
+    }
+  }
+
+  verifyPhoneNumber(userId: string) {
+    this.loadingService.setLoading(true);
+    if (userId) {
+      this.userService.verifySendPhoneNumber().subscribe({
+        next: (response) => {
+          this.toastrService.success(
+            'Hệ thống đã gửi xác thực đến email của bạn'
+          );
+          this.loadingService.setLoading(false);
+          window.open(
+            `http://localhost:4200/verify-phone?userId=${this.authService.getId()}`,
+            '_blank'
+          );
+        },
+        error: (error) => {
+          this.toastrService.error(error || message);
           this.loadingService.setLoading(false);
         },
       });

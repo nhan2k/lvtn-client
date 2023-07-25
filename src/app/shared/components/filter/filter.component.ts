@@ -3,6 +3,7 @@ import { ExternalApiService } from './../../../core/services/external-api.servic
 import { Component, Input, OnInit } from '@angular/core';
 import { ISelect } from '@core/interfaces/category';
 import { Router } from '@angular/router';
+import { prices } from '@core/values/filter';
 
 @Component({
   selector: 'app-filter',
@@ -18,6 +19,7 @@ export class FilterComponent implements OnInit {
   districts: ISelect[] = [];
   codeDistrict: number | null = null;
   province: string | null = null;
+  prices: Array<any> = prices;
 
   constructor(
     private readonly externalApiService: ExternalApiService,
@@ -75,6 +77,22 @@ export class FilterComponent implements OnInit {
           ...this.currentParams,
           province: this.province,
           district: ($event.target as any).value,
+        },
+      })
+      .then(() => {
+        this.loadingService.setLoading(false);
+      })
+      .catch(() => this.loadingService.setLoading(false));
+  }
+
+  onChangePrice(target: any) {
+    const priceValue = target.value;
+
+    this.router
+      .navigate([`${this.currentLink}`], {
+        queryParams: {
+          ...this.currentParams,
+          price: priceValue,
         },
       })
       .then(() => {

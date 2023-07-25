@@ -6,6 +6,7 @@ import {
   FormBuilder,
   FormGroup,
   ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
@@ -48,10 +49,14 @@ export class RegisterComponent implements OnInit {
         [this.phoneNumberValidator()],
       ],
       password: [null, [Validators.required, Validators.minLength(4)]],
+      passwordConfirm: [
+        null,
+        [Validators.required, this.matchPasswordValidator()],
+      ],
       email: [null, [Validators.required, Validators.email]],
       fullName: [null, [Validators.required, Validators.minLength(4)]],
       province: [null],
-      district: [null, [Validators.required]],
+      district: [null, [[Validators.required, Validators.max(250)]]],
       address: [null, [Validators.required, Validators.minLength(4)]],
     });
   }
@@ -89,7 +94,7 @@ export class RegisterComponent implements OnInit {
           this.loadingService.setLoading(false);
         },
         error: (error) => {
-          this.toastrService.error(message);
+          this.toastrService.error(error || message);
           this.loadingService.setLoading(false);
         },
       });
@@ -125,5 +130,18 @@ export class RegisterComponent implements OnInit {
           this.loadingService.setLoading(false);
         },
       });
+  }
+
+  matchPasswordValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const password = control.root.get('password');
+      const confirmPassword = control.value;
+
+      if (password && confirmPassword && password.value !== confirmPassword) {
+        return { mismatch: true };
+      }
+
+      return null;
+    };
   }
 }

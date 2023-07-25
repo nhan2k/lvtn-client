@@ -18,6 +18,7 @@ export class PostDetailComponent implements OnInit {
   post: any;
   email: string | null = null;
   endpointURL: string = environment.imgUrl;
+  countSaw: number | null = null;
 
   objCategory: Object | any = {};
   Object = Object;
@@ -56,13 +57,23 @@ export class PostDetailComponent implements OnInit {
             this.loadingService.setLoading(false);
           },
           error: (error) => {
-            this.toastrService.error(message);
+            this.toastrService.error(error || message);
             this.loadingService.setLoading(false);
           },
         });
+        this.postService.countSaw(params['id']).subscribe({
+          next: (response) => {
+            console.log(
+              '🚀 ~ file: post-detail.component.ts:65 ~ PostDetailComponent ~ this.postService.countSaw ~ response:',
+              response
+            );
+            this.countSaw = response?.countSaw;
+          },
+          error: (error) => {},
+        });
       },
       error: (error) => {
-        this.toastrService.error(message);
+        this.toastrService.error(error || message);
         this.loadingService.setLoading(false);
       },
     });
@@ -80,8 +91,8 @@ export class PostDetailComponent implements OnInit {
             this.loadingService.setLoading(false);
           }
         },
-        error: (err) => {
-          this.toastrService.error(message);
+        error: (error) => {
+          this.toastrService.error(error || message);
           this.loadingService.setLoading(false);
         },
       });

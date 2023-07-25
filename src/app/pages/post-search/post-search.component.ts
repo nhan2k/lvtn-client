@@ -36,13 +36,13 @@ export class PostSearchComponent implements OnInit, OnDestroy {
             this.loadingService.setLoading(false);
           },
           error: (error) => {
-            this.toastrService.error(message);
+            this.toastrService.error(error || message);
             this.loadingService.setLoading(false);
           },
         });
       },
       error: (error) => {
-        this.toastrService.error(message);
+        this.toastrService.error(error || message);
         this.loadingService.setLoading(false);
       },
     });

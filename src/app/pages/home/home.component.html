@@ -1,4 +1,10 @@
-<h5>Khám phá danh mục</h5>
+<app-posts
+  [posts]="hotPostList"
+  [title]="'Tin đăng Hot'"
+  [totalItems]="totalItems"
+></app-posts>
+
+<h1>Khám phá danh mục</h1>
 <div class="container text-center">
   <div class="row gap-5 my-5">
     <div
@@ -246,4 +252,8 @@
   </div>
 </div>
 
-<app-posts [posts]="postList" [title]="'Tin đăng mới'"></app-posts>
+<app-posts
+  [posts]="postList"
+  [title]="'Tin đăng mới'"
+  [isPagination]="false"
+></app-posts>

@@ -16,8 +16,9 @@ import { ToastrService } from 'ngx-toastr';
 export class CheckoutComponent {
   packages: IPackage[] = packages;
   packChoose: IPackage | null = null;
-  paymentChoose: boolean = false;
+  paymentChoose?: number;
   email: string | null = null;
+  amount: string = '0';
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -33,14 +34,15 @@ export class CheckoutComponent {
         this.packChoose = this.packages.filter(
           (pack) => pack.id == params['pack']
         )[0];
+        this.amount = (this.packChoose.price / 23000).toFixed(2).toString();
       },
       error: (err: any) => {},
     });
     this.email = this.authService.getEmail();
   }
 
-  onChecked() {
-    this.paymentChoose = true;
+  onChecked(num: number) {
+    this.paymentChoose = num;
   }
 
   onClickPayment() {
@@ -58,8 +60,8 @@ export class CheckoutComponent {
             });
             this.loadingService.setLoading(false);
           },
-          error: (err) => {
-            this.toastrService.error(message);
+          error: (error) => {
+            this.toastrService.error(error || message);
             this.loadingService.setLoading(false);
           },
         });

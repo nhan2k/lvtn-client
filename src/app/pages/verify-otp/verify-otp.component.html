@@ -1,0 +1,23 @@
+<div style="margin: auto; width: 100%; height: 100vh; text-align: center">
+  <h1>Verify Your OTP</h1>
+  <form>
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="exampleInputphone1"
+        aria-describedby="phoneHelp"
+        [maxLength]="6"
+        style="margin: auto; width: 10%"
+        placeholder="OTP"
+        (change)="onChangeOTP($event.target)"
+      />
+      <div id="phoneHelp" class="form-text">
+        you'ld never share your opt with anyone else.
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="onClickSubmit()">
+      Submit
+    </button>
+  </form>
+</div>

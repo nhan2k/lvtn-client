@@ -14,8 +14,8 @@ export class AuthLayoutComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     const token = this.authService.getToken();
-    if (!token) {
-      this.router.navigate(['/login']);
-    }
+    // if (!token) {
+    //   this.router.navigate(['/login']);
+    // }
   }
 }

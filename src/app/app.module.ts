@@ -48,6 +48,11 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { VerifyEmailComponent } from './pages/verify-email/verify-email.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SettingComponent } from './pages/setting/setting.component';
+import { VerifyOtpComponent } from './pages/verify-otp/verify-otp.component';
+import { SuggestComponent } from './pages/suggest/suggest.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { PaypalComponent } from './shared/components/paypal/paypal.component';
+import { NgxPayPalModule } from 'ngx-paypal';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -84,6 +89,9 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     CheckoutComponent,
     VerifyEmailComponent,
     SettingComponent,
+    VerifyOtpComponent,
+    SuggestComponent,
+    PaypalComponent,
   ],
   imports: [
     BrowserModule,
@@ -97,6 +105,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     ToastrModule.forRoot(),
     SocketIoModule.forRoot(config),
     NgbModule,
+    MatPaginatorModule,
+    NgxPayPalModule
   ],
   providers: [
     {

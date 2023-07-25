@@ -27,9 +27,10 @@ export class LoginComponent {
 
   onSubmit(): void {
     const credentials = {
-      phoneNumber: this.loginForm.value.phoneNumber || undefined,
-      password: this.loginForm.value.password || undefined,
+      phoneNumber: this.loginForm.value.phoneNumber || '',
+      password: this.loginForm.value.password || '',
     };
+
     this.loadingService.setLoading(true);
     this.authService.login(credentials).subscribe({
       next: (response) => {
@@ -38,10 +39,13 @@ export class LoginComponent {
           this.loadingService.setLoading(false);
         } else {
           this.authService.storeToken(response as ITokens);
-          this.router.navigate(['/']);
           this.toastrService.success('Đăng nhập thành công');
           this.loginForm.reset();
           this.loadingService.setLoading(false);
+          this.router.navigate(['/']).then(() => {
+            // Reload the page after navigation
+            window.location.reload();
+          });
         }
       },
       error: (error) => {

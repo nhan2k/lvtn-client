@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
   isLoggined = false;
   myForm: FormGroup;
   postsNotify: any[] = [];
-  userId: string | null = null;
+  userId: string | null;
   profile: any;
 
   constructor(
@@ -29,8 +29,9 @@ export class HeaderComponent implements OnInit {
     private readonly toastrService: ToastrService,
     private readonly postService: PostService
   ) {
+    this.userId = this.authService.getId();
     this.myForm = this.formBuilder.group({
-      keyword: [null, Validators.required],
+      keyword: [null, [Validators.required, Validators.max(250)]],
     });
   }
 
@@ -38,28 +39,24 @@ export class HeaderComponent implements OnInit {
     if (this.authService.getToken()) {
       this.isLoggined = true;
       this.loadingService.setLoading(true);
-
       this.postService.getPostsNotify().subscribe({
         next: (value) => {
           this.postsNotify = value;
           this.loadingService.setLoading(false);
         },
-        error: (err) => {
-          this.toastrService.error(message);
+        error: (error) => {
+          this.loadingService.setLoading(false);
+        },
+      });
+      this.authService.getProfile().subscribe({
+        next: (response) => {
+          this.profile = response;
+        },
+        error: (error) => {
           this.loadingService.setLoading(false);
         },
       });
     }
-    this.userId = this.authService.getId();
-    this.authService.getProfile().subscribe({
-      next: (response) => {
-        this.profile = response;
-      },
-      error: (err) => {
-        this.toastrService.error(message);
-        this.loadingService.setLoading(false);
-      },
-    });
   }
 
   onClick() {
@@ -86,7 +83,7 @@ export class HeaderComponent implements OnInit {
           this.loadingService.setLoading(false);
         },
         error: (error) => {
-          this.toastrService.error(message);
+          this.toastrService.error(error || message);
           this.loadingService.setLoading(false);
         },
       });

@@ -64,8 +64,8 @@ export class PostCreateMotorbikeComponent {
       statusMotorbike: ['Mới'],
       numberOfKM: [0, Validators.min(0)],
       totalPrice: [0, [Validators.min(0)]],
-      title: [null, Validators.required],
-      content: [null, Validators.required],
+      title: [null, [Validators.required, Validators.max(250)]],
+      content: [null, [Validators.required, Validators.max(250)]],
     });
   }
 
@@ -133,7 +133,7 @@ export class PostCreateMotorbikeComponent {
           this.loadingService.setLoading(false);
         },
         error: (error) => {
-          this.toastrService.error(message);
+          this.toastrService.error(error || message);
           this.loadingService.setLoading(false);
         },
       });

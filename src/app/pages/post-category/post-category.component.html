@@ -1,2 +1,22 @@
+<div *ngIf="isAuth">
+  <button
+    class="btn btn-primary mb-2"
+    data-bs-toggle="tooltip"
+    data-bs-title="Gợi ý cho tôi về thể loại tin này"
+    (click)="onClickSuggest(true)"
+    *ngIf="!isSuggested; else template"
+  >
+    Gợi ý
+  </button>
+  <ng-template #template>
+    <button class="btn btn-danger mb-2" (click)="onClickSuggest(false)">
+      Hủy gợi ý
+    </button>
+  </ng-template>
+</div>
 <app-filter [currentLink]="'/category'" [currentParams]="params"></app-filter>
-<app-posts [posts]="postList" [title]="'Tin đăng ' + category"></app-posts>
+<app-posts
+  [posts]="postList"
+  [title]="'Tin đăng ' + category"
+  [isPagination]="false"
+></app-posts>

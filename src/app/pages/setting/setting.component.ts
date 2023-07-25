@@ -50,7 +50,7 @@ export class SettingComponent {
       email: [null, [Validators.required, Validators.email]],
       fullName: [null, [Validators.required, Validators.minLength(4)]],
       province: [null],
-      district: [null, [Validators.required]],
+      district: [null, [Validators.required, Validators.max(250)]],
       address: [null, [Validators.required, Validators.minLength(4)]],
     });
   }
@@ -105,7 +105,7 @@ export class SettingComponent {
           this.loadingService.setLoading(false);
         },
         error: (error) => {
-          this.toastrService.error(message);
+          this.toastrService.error(error || message);
           this.loadingService.setLoading(false);
         },
       });

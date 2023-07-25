@@ -48,16 +48,16 @@ export class PostCreateMotelRoomComponent {
     this.myForm = this.formBuilder.group({
       categoryName: ['Phòng trọ'],
       type: ['Cần bán'],
-      addressInForm: [null, Validators.required],
+      addressInForm: [null, [Validators.required, Validators.max(250)]],
       deposit: [0, Validators.min(0)],
       interiorCondition: ['Nội thất cao cấp'],
       area: [0, Validators.min(0)],
       totalPrice: [0, Validators.min(0)],
 
-      title: [null, Validators.required],
-      content: [null, Validators.required],
+      title: [null, [Validators.required, Validators.max(250)]],
+      content: [null, [Validators.required, Validators.max(250)]],
       province: [null],
-      district: [null, [Validators.required]],
+      district: [null, [Validators.required, Validators.max(250)]],
     });
   }
 
@@ -166,7 +166,11 @@ export class PostCreateMotelRoomComponent {
             this.loadingService.setLoading(false);
           },
           error: (error) => {
-            this.toastrService.error(message);
+            console.log(
+              '🚀 ~ file: motel-room.component.ts:169 ~ PostCreateMotelRoomComponent ~ this.postService.createPost ~ error:',
+              error
+            );
+            this.toastrService.error(error || message);
             this.loadingService.setLoading(false);
           },
         });

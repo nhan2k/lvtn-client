@@ -13,6 +13,8 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { VerifyEmailComponent } from './pages/verify-email/verify-email.component';
 import { RatingComponent } from './pages/rating/rating.component';
 import { SettingComponent } from './pages/setting/setting.component';
+import { VerifyOtpComponent } from './pages/verify-otp/verify-otp.component';
+import { SuggestComponent } from './pages/suggest/suggest.component';
 
 const routes: Routes = [
   {
@@ -61,11 +63,19 @@ const routes: Routes = [
         path: 'setting',
         component: SettingComponent,
       },
+      {
+        path: 'suggest',
+        component: SuggestComponent,
+      },
     ],
   },
   {
     path: 'verify-email',
     component: VerifyEmailComponent,
+  },
+  {
+    path: 'verify-phone',
+    component: VerifyOtpComponent,
   },
 ];
 

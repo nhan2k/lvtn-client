@@ -44,13 +44,13 @@ export class PostManageComponent implements OnInit {
               this.loadingService.setLoading(false);
             },
             error: (error) => {
-              this.toastrService.error(message);
+              this.toastrService.error(error || message);
               this.loadingService.setLoading(false);
             },
           });
       },
       error: (error) => {
-        this.toastrService.error(message);
+        this.toastrService.error(error || message);
         this.loadingService.setLoading(false);
       },
     });
@@ -80,7 +80,7 @@ export class PostManageComponent implements OnInit {
           );
         },
         error: (error) => {
-          this.toastrService.error(message);
+          this.toastrService.error(error || message);
           this.loadingService.setLoading(false);
         },
       });
@@ -97,15 +97,18 @@ export class PostManageComponent implements OnInit {
         .subscribe({
           next: (response) => {
             this.toastrService.success(`Thanh toán dịch vụ đẩy tin thành công`);
-            this.posts = this.posts.map((post) => {
-              if (post._id === response._id) {
-                post.isPromoted = response?.isPromoted;
+            this.posts.map((post) => {
+              if (post._id == response._id) {
+                post.isPromoted = true;
               }
+              return post;
             });
             this.loadingService.setLoading(false);
           },
-          error: (err) => {
-            this.toastrService.error(message);
+          error: (error) => {
+            this.toastrService.error(
+              'Bạn không đủ số đồng tốt. Vui lòng kiểm tra lại'
+            );
             this.loadingService.setLoading(false);
           },
         });

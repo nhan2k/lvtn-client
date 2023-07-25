@@ -21,7 +21,8 @@ export class AuthService {
   }
 
   getId() {
-    return sessionStorage.getItem('_id');
+    const id = sessionStorage.getItem('_id');
+    return id;
   }
 
   getEmail() {
@@ -34,7 +35,7 @@ export class AuthService {
 
   login(credentials?: {
     phoneNumber?: string;
-    password?: string;
+    password: string;
   }): Observable<any> {
     try {
       return this.httpClient.post(`user/login`, credentials);
@@ -45,7 +46,7 @@ export class AuthService {
 
   register(credentials?: {
     phoneNumber?: string;
-    password?: string;
+    password: string;
   }): Observable<any> {
     try {
       return this.httpClient.post(`user/register`, credentials);

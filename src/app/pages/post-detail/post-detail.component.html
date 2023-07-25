@@ -102,6 +102,14 @@
               >
             </div>
           </li>
+
+          <li class="list-group-item">
+            <div class="d-flex gap-3 align-items-center">
+              <i class="bi bi-info-square fs-4 px-3"></i>
+              <span>Số lần tin được xem: {{ countSaw }}</span>
+            </div>
+          </li>
+
           <li
             *ngIf="post?.userId?.email !== email"
             class="list-group-item active"

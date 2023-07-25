@@ -57,8 +57,8 @@ export class PostCreateElectricBicycleComponent {
       capacity: ['Dưới 50 cc'],
       statusElectricBicycle: ['Mới'],
       totalPrice: [0, Validators.min(0)],
-      title: [null, Validators.required],
-      content: [null, Validators.required],
+      title: [null, [Validators.required, Validators.max(250)]],
+      content: [null, [Validators.required, Validators.max(250)]],
     });
   }
 
@@ -135,7 +135,7 @@ export class PostCreateElectricBicycleComponent {
           this.loadingService.setLoading(false);
         },
         error: (error) => {
-          this.toastrService.error(message);
+          this.toastrService.error(error || message);
           this.loadingService.setLoading(false);
         },
       });

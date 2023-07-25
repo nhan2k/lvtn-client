@@ -50,19 +50,19 @@ export class PostCreateGroundComponent {
   ) {
     this.myForm = this.formBuilder.group({
       categoryName: ['Đất'],
-      type: ['Cần bán', Validators.required],
+      type: ['Cần bán', [Validators.required, Validators.max(250)]],
       typeGround: ['Đất thổ cư'],
-      addressInForm: [null, Validators.required],
+      addressInForm: [null, [Validators.required, Validators.max(250)]],
       groundDirection: ['Đông'],
       juridical: ['Đã có sổ'],
       area: [0, Validators.min(0)],
       height: [0, Validators.min(0)],
       width: [0, Validators.min(0)],
       totalPrice: [0, Validators.min(0)],
-      title: [null, Validators.required],
-      content: [null, Validators.required],
+      title: [null, [Validators.required, Validators.max(250)]],
+      content: [null, [Validators.required, Validators.max(250)]],
       province: [null],
-      district: [null, [Validators.required]],
+      district: [null, [Validators.required, Validators.max(250)]],
     });
   }
 
@@ -172,7 +172,7 @@ export class PostCreateGroundComponent {
             });
           },
           error: (error) => {
-            this.toastrService.error(message);
+            this.toastrService.error(error || message);
             this.loadingService.setLoading(false);
           },
         });

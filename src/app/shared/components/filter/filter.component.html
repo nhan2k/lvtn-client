@@ -15,4 +15,12 @@
       </option>
     </select>
   </div>
+  <div class="col-3">
+    <select class="form-select" (change)="onChangePrice($event.target)">
+      <option selected disabled>Giá</option>
+      <option *ngFor="let price of prices" value="{{ price.value }}">
+        {{ price.label }}
+      </option>
+    </select>
+  </div>
 </div>

@@ -230,5 +230,6 @@ option {
   }
 }
 
-/* Importing Bootstrap SCSS file. */
-@import "bootstrap/scss/bootstrap";
+.mat-mdc-paginator {
+  background-color: gray;
+}

@@ -27,7 +27,7 @@ export class CoinComponent implements OnInit {
       next: (resposne) => {
         this.wallet = resposne;
       },
-      error: (err) => {},
+      error: (error) => {},
     });
   }
 }
